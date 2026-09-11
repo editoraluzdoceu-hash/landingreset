@@ -1,10 +1,14 @@
-import { motion, useReducedMotion } from 'motion/react';
-import type { ReactNode } from 'react';
+import { motion, useReducedMotion, type HTMLMotionProps } from 'motion/react';
 
-export default function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+interface RevealProps extends HTMLMotionProps<'div'> {
+  delay?: number;
+}
+
+export default function Reveal({ children, className = '', delay = 0, ...rest }: RevealProps) {
   const reduceMotion = useReducedMotion();
   return (
     <motion.div
+      {...rest}
       className={className}
       initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
       whileInView={{ opacity: 1, y: 0 }}

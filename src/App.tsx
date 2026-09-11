@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, Quote, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
 import AccordionItem from './components/AccordionItem';
 import { Brand, ResetMark } from './components/Brand';
 import CheckoutLink from './components/CheckoutLink';
@@ -151,14 +151,14 @@ export default function App() {
             </motion.div>
 
             <motion.div className="hero-media" initial="hidden" animate="visible" variants={{ hidden: { opacity: 0, y: reduceMotion ? 0 : 18 }, visible: { opacity: 1, y: 0, transition: { duration: .9, ease: [.22, 1, .36, 1], delay: .35 } } }}>
-              <HeroVideo onWatchFull={() => showDetails('home')} />
+              <HeroVideo onExplore={() => document.getElementById('produto')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' })} onWatchFull={() => showDetails('home')} />
             </motion.div>
           </div>
         </section>
 
         <section className="proof-section" aria-label="Uma experiência compartilhada com o Método RESET">
           <Reveal className="container proof-inner">
-            <Quote size={26} strokeWidth={1.25} aria-hidden="true" />
+            <img className="proof-avatar" src="/images/testimonials/thiago.jpg" alt="Foto de Thiago Martins" width={44} height={44} loading="lazy" decoding="async" />
             <div><blockquote>&ldquo;Pela primeira vez eu não desisti de mim.&rdquo;</blockquote><p>Thiago Martins, 34 anos — Belo Horizonte <span>sobre o Protocolo de Recaída</span></p></div>
             <a href="#depoimentos">Conheça as histórias <ArrowRight size={16} /></a>
           </Reveal>
@@ -269,6 +269,7 @@ export default function App() {
                 <span aria-hidden="true">R$</span><strong aria-hidden="true">{official.price}</strong><span className="sr-only">{formattedPrice}</span>
               </div>
               <p className="offer-payment">À vista no PIX por <strong>{pricing.price}</strong><br /><small>{pricing.installments.long} • total {pricing.installments.totalParcelado} — {pricing.parcelNote} • Acesso vitalício • Sem mensalidade</small></p>
+              <p className="offer-perday"><Sparkles size={12} /> {pricing.perDayLine}</p>
               <ul>{offerList.map((item) => <li key={item}><Check size={15} /><span>{item}</span></li>)}</ul>
               <CheckoutLink>Quero começar meu RESET por {pricing.price}</CheckoutLink>
               <p className="offer-checkout"><LockKeyhole size={12} />Compra segura e entrega pela Cakto.</p>

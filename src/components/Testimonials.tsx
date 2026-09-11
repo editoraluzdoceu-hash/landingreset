@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { ArrowDown, ArrowUp, BadgeCheck, Quote, Star } from 'lucide-react';
-import { testimonials } from '../data/content';
+import { ArrowDown, ArrowUp, BadgeCheck, Quote, Star, TrendingUp } from 'lucide-react';
+import { testimonialStats, testimonials } from '../data/content';
 import Reveal from './Reveal';
 
 export default function Testimonials() {
@@ -14,6 +14,14 @@ export default function Testimonials() {
         <Reveal className="section-heading split-heading">
           <div><p className="eyebrow">RECOMEÇOS REAIS • HISTÓRIAS VERIFICADAS</p><h2 id="testimonials-title">Pequenos passos.<br /><em>Novos significados.</em></h2></div>
           <p className="section-description">O que pessoas reais compartilharam sobre o próprio caminho com o RESET. Fotos com autorização — vídeos e áudios disponíveis no checkout.</p>
+        </Reveal>
+        <Reveal className="testimonial-stats" delay={.05} role="group" aria-label="Números do RESET até aqui">
+          {testimonialStats.map((stat) => (
+            <div key={stat.value}>
+              <strong>{stat.value}</strong>
+              <small>{stat.label}</small>
+            </div>
+          ))}
         </Reveal>
         <div className="testimonials-grid">
           {testimonials.map((item, index) => {
@@ -36,6 +44,10 @@ export default function Testimonials() {
                       <motion.p key={isExpanded ? 'full' : 'excerpt'} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .15 }}>{isExpanded ? item.quote : `“${item.excerpt}”`}</motion.p>
                     </AnimatePresence>
                   </blockquote>
+                  <p className="testimonial-impact">
+                    <TrendingUp size={12} aria-hidden="true" />
+                    <span><strong>{item.impact.value}</strong> {item.impact.label}</span>
+                  </p>
                   <div className="testimonial-person">
                     <img
                       src={item.avatar}

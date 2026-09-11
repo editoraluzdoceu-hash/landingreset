@@ -43,9 +43,9 @@
 .ap-eyebrow { display: block; color: var(--ap-gold-light); font-weight: 700; letter-spacing: 1px; font-size: 7px; line-height: 1.6; }
 .ap-primary, .ap-secondary { display: inline-flex; justify-content: center; align-items: center; gap: 5px; padding: 9px 9px; min-height: 30px; border: 1px solid transparent; border-radius: 6px; font-family: var(--ap-sans); font-size: 8px; line-height: 1.45; font-weight: 600; transition: filter .2s, border-color .2s; }
 .ap-primary { color: #221705; background: linear-gradient(135deg, var(--ap-gold-light), var(--ap-gold-deep)); }
-.ap-secondary { color: var(--ap-cream); background: var(--ap-high); border-color: var(--ap-line); }
+.ap-secondary { color: var(--ap-cream); background: transparent; border-color: #59492f80; }
 .ap-primary:hover { filter: brightness(1.1); }
-.ap-secondary:hover { border-color: var(--ap-gold-deep); }
+.ap-secondary:hover { border-color: var(--ap-gold-deep); background: #211b1280; }
 .ap-primary > svg, .ap-secondary > svg { flex-shrink: 0; }
 .ap-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 13px; }
 .ap-card { border: 1px solid var(--ap-line); border-radius: 11px; padding: 14px 12px; background: var(--ap-card); }
@@ -154,6 +154,10 @@
 .ap-sample-input > span { color: var(--ap-dim); font-size: 6px; letter-spacing: 1px; }
 .ap-quiz-card .ap-actions { justify-content: space-between; margin-top: 18px; }
 .ap-text-button { display: inline-flex; align-items: center; gap: 5px; background: transparent; color: var(--ap-body); font-size: 9px; padding: 8px 0; }
+/* Ações informativas ficam em segundo plano para não competir com a ação principal. */
+.ap-quiet { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; background: transparent; color: var(--ap-dim); font-size: 8px; line-height: 1.6; padding: 4px 0; border-bottom: 1px dashed #59492f; transition: color .2s, border-color .2s; }
+.ap-quiet:hover { color: var(--ap-gold-light); border-color: var(--ap-gold-deep); }
+.ap-quiet > svg { flex-shrink: 0; }
 .ap-quiz-card > p.ap-footnote { font-size: 8px; color: var(--ap-dim); margin-top: 20px; }
 .ap-motive-list { display: flex; flex-direction: column; gap: 8px; margin-top: 17px; }
 .ap-motive-list > div { display: flex; align-items: center; justify-content: space-between; gap: 6px; border: 1px solid var(--ap-line); padding: 12px 9px; border-radius: 8px; color: var(--ap-body); background: var(--ap-high); font-size: 9px; }
