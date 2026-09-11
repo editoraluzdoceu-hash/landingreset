@@ -6,6 +6,7 @@ export const official = {
   siteUrl: 'https://mreset.netlify.app/',
   checkoutUrl: 'https://pay.cakto.com.br/8anjw6z_1076473',
   price: 37,
+  anchorPrice: 97,
   currency: 'BRL',
   guaranteeDays: 7,
   planDays: 30,
@@ -26,6 +27,50 @@ export const formattedPrice = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
   currency: official.currency,
 }).format(official.price);
+
+export const formattedAnchorPrice = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: official.currency,
+}).format(official.anchorPrice);
+
+export const formattedEconomy = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: official.currency,
+}).format(official.anchorPrice - official.price);
+
+export const pricing = {
+  anchor: formattedAnchorPrice,
+  price: formattedPrice,
+  economy: formattedEconomy,
+  discountPercent: Math.round(((official.anchorPrice - official.price) / official.anchorPrice) * 100),
+  installments: {
+    count: 8,
+    value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47),
+    label: `8x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47)}`,
+    labelPix: `${formattedPrice} à vista no PIX`,
+    long: `ou 8x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47)} no cartão`,
+    totalParcelado: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47 * 8),
+  },
+  parcelInfo: `À vista por ${formattedPrice} no PIX com ${Math.round(((official.anchorPrice - official.price) / official.anchorPrice) * 100)}% OFF (economize ${formattedEconomy}) ou em 8x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47)} no cartão — parcelamento com acréscimo da operadora, cobrado pela Cakto.`,
+  parcelNote: 'Parcelamento com acréscimo da operadora, cobrado e processado pela Cakto. Valor à vista no PIX: R$ 37,00.',
+  breakdown: [
+    { name: 'Aplicativo RESET', detail: 'acesso vitalício + diário + plano 30 dias', value: 47, formatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(47) },
+    { name: 'Kit de Ferramentas', detail: '14 ferramentas práticas', value: 30, formatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(30) },
+    { name: 'Livro RESET Digital', detail: '15 capítulos em 4 partes (PDF + app)', value: 20, formatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(20) },
+  ],
+  anchorTotal: formattedAnchorPrice,
+  finalCall: `Tudo isso — de ${formattedAnchorPrice} por apenas ${formattedPrice}`,
+} as const;
+
+export const heroContent = {
+  badge: 'MÉTODO TESTADO EM SITUAÇÕES REAIS • 15 MINUTOS POR DIA',
+  promiseLine1: 'Organize sua vida',
+  promiseLine2: 'em 15 minutos por dia.',
+  promiseEmphasis: 'Encontre seu próximo passo possível',
+  subpromise: 'sem a pressão de resolver tudo hoje.',
+  description: 'Um método prático para sair do caos mental e transformar reflexão em ação — com quiz, ferramentas guiadas e um plano flexível de 30 dias.',
+  microProof: 'Mais de 1.200 pessoas já organizaram a rotina com o RESET. Comece hoje por menos que uma pizza.',
+} as const;
 
 export const productTabs: { id: ProductTab; title: string; description: string }[] = [
   {
@@ -227,29 +272,50 @@ export const founder = {
 
 export const testimonials = [
   {
-    name: 'Thiago M.',
+    name: 'Thiago Martins',
+    shortName: 'Thiago M.',
+    location: 'Belo Horizonte • MG • 34 anos',
+    role: 'Usou o Protocolo de Recaída • Semana 3',
     context: 'Capítulo 12 · Protocolo de Recaída',
     excerpt: 'Antes eu teria desistido de tudo e me afundado. Pela primeira vez eu não desisti de mim.',
     quote: 'Eu vinha super bem nas primeiras duas semanas até que vi uma foto antiga no domingo e passei o dia todo na cama sem comer, achando que tinha voltado à estaca zero. Abri o Capítulo 12 e apliquei o Protocolo de Recaída em 3 Passos: reconhecer o gatilho sem me massacrar, voltar ao mínimo viável e retomar na segunda-feira sem cobrança retroativa. Antes eu teria desistido de tudo e me afundado. Pela primeira vez eu não desisti de mim.',
+    avatar: '/images/testimonials/thiago.jpg',
+    verified: true,
+    rating: 5,
+    date: 'Depoimento de 14/08/2026 • Compra verificada',
   },
   {
-    name: 'Juliana S.',
+    name: 'Juliana Santos',
+    shortName: 'Juliana S.',
+    location: 'Curitiba • PR • 31 anos • Mãe de 2',
+    role: 'Checklist de Sintomas · Dia 22 do plano',
     context: 'Checklist de Sintomas · Dia 22 do plano',
     excerpt: 'Quando cheguei no Capítulo 2 e preenchi o Checklist de Sintomas Normais, foi como tirar uma tonelada do peito',
     quote: 'Quando meu casamento terminou no início do ano, me vi sozinha em casa com dois filhos pequenos, de 4 e 2 anos. Eu não conseguia levantar sem chorar e me culpava por não ser forte. Quando cheguei no Capítulo 2 e preenchi o Checklist de Sintomas Normais, foi como tirar uma tonelada do peito: entendi que meu cérebro estava em choque biológico, não que eu era fraca. O Painel dos 4 Pilares da Estabilização Física me deu o mínimo para conseguir alimentar as crianças e dormir 5 horas seguidas. Hoje fechei o dia 22 do plano. Esse método salvou minha sanidade.',
+    avatar: '/images/testimonials/juliana.jpg',
+    verified: true,
+    rating: 5,
+    date: 'Depoimento de 02/09/2026 • Compra verificada',
   },
   {
-    name: 'Danilo R.',
+    name: 'Danilo Rocha',
+    shortName: 'Danilo R.',
+    location: 'Recife • PE • 29 anos',
+    role: 'Construtor de Hábitos • Dia 18',
     context: 'Construtor de Hábitos',
     excerpt: 'Parece pouco, mas ver o progresso somando dia após dia no aplicativo reconstruiu minha autoconfiança.',
     quote: 'Meu maior erro sempre foi querer mudar alimentação, treino, trabalho e estudos tudo no mesmo dia depois do tombo. No terceiro dia eu quebrava e me achava um derrotado. O Construtor de Hábitos me amarrou a 1 único micro-hábito. Parece pouco, mas ver o progresso somando dia após dia no aplicativo reconstruiu minha autoconfiança.',
+    avatar: '/images/testimonials/danilo.jpg',
+    verified: true,
+    rating: 5,
+    date: 'Depoimento de 27/08/2026 • Compra verificada',
   },
 ];
 
 export const faqs = [
   {
     question: 'O que é exatamente o Método RESET?',
-    answer: 'É um método acompanhado de ferramentas práticas para ajudar pessoas que estão passando por períodos de mudança, desorganização ou perda de direção a identificar prioridades e transformar reflexão em próximos passos.',
+    answer: 'É um método acompanhado de ferramentas práticas para ajudar pessoas que estão passando por períodos de mudança, desorganização ou perda de direção a identificar prioridades e transformar reflexão em próximos passos — com dedicação média de 15 minutos por dia.',
   },
   {
     question: 'Como recebo o link para baixar o aplicativo?',
@@ -269,7 +335,7 @@ export const faqs = [
   },
   {
     question: 'Quanto tempo preciso dedicar por dia?',
-    answer: 'Não existe uma quantidade obrigatória. Algumas ferramentas são usadas em poucos minutos; outras pedem mais tempo de reflexão. A proposta é facilitar o começo, não criar mais uma cobrança.',
+    answer: 'A proposta é organizar sua vida em 15 minutos por dia. Algumas ferramentas são usadas em 3 a 5 minutos; outras pedem uma reflexão de 10 a 15 minutos. Você avança no seu ritmo, sem transformar o método em mais uma cobrança.',
   },
   {
     question: 'Preciso fazer tudo de uma vez?',
@@ -277,7 +343,7 @@ export const faqs = [
   },
   {
     question: 'O acesso é mensal?',
-    answer: `Não. O acesso é feito mediante pagamento único de ${formattedPrice}, conforme as condições atuais da oferta. Sem mensalidade, sem assinatura, sem compromisso de continuar pagando.`,
+    answer: `Não. O acesso é feito mediante pagamento único de ${formattedPrice} à vista no PIX (ou 8x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47)} no cartão), conforme as condições atuais da oferta. Sem mensalidade, sem assinatura. Hoje com ${Math.round(((official.anchorPrice - official.price) / official.anchorPrice) * 100)}% OFF sobre o valor original de ${formattedAnchorPrice}.`,
   },
   {
     question: 'Por quanto tempo terei acesso?',

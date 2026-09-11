@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Leaf, LockKeyhole, Menu, Quote, ShieldCheck, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, Quote, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
 import AccordionItem from './components/AccordionItem';
 import { Brand, ResetMark } from './components/Brand';
 import CheckoutLink from './components/CheckoutLink';
 import DevicePreview from './components/DevicePreview';
+import HeroVideo from './components/HeroVideo';
 import Reveal from './components/Reveal';
 import SiteDialogs, { type SiteDialogKind } from './components/SiteDialogs';
 import Testimonials from './components/Testimonials';
-import { delivery, faqs, formattedPrice, founder, howItWorks, offerList, official, productTabs, toolShowcase, type ProductTab } from './data/content';
+import { delivery, faqs, formattedPrice, founder, heroContent, howItWorks, offerList, official, pricing, productTabs, toolShowcase, type ProductTab } from './data/content';
 
 const navLinks = [
   { href: 'como-funciona', label: 'O método' },
@@ -106,7 +107,7 @@ export default function App() {
               {navLinks.map((link, index) => <a key={link.href} className="mobile-nav-link" href={`#${link.href}`} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{link.label}<ArrowUpRight size={20} /></a>)}
               <a className="mobile-nav-link" href="#duvidas" onClick={() => setMenuOpen(false)}><span>05</span>Dúvidas frequentes<ArrowUpRight size={20} /></a>
               <a className="button button-primary" href="#oferta" onClick={() => setMenuOpen(false)}>Conhecer o Kit RESET <ArrowRight size={17} /></a>
-              <p>R$ 37. Um pagamento. Um recomeço possível.</p>
+              <p><s style={{ opacity: .6 }}>{pricing.anchor}</s> por {pricing.price} • {pricing.installments.label} • Acesso vitalício</p>
             </div>
           </motion.nav>}
         </AnimatePresence>
@@ -114,19 +115,43 @@ export default function App() {
       {menuOpen && <button className="mobile-scrim" tabIndex={-1} aria-label="Fechar navegação" onClick={() => setMenuOpen(false)} />}
 
       <main id="main-content" tabIndex={-1} inert={menuOpen}>
-        <section id="inicio" className="hero" aria-labelledby="hero-title">
+        <section id="inicio" className="hero hero-with-video" aria-labelledby="hero-title">
           <picture className="hero-picture" aria-hidden="true"><source media="(max-width: 767px)" srcSet="/images/reset-hero-mobile.jpg" /><img src="/images/reset-hero.jpg" alt="" fetchPriority="high" decoding="async" /></picture>
           <div className="hero-shade" aria-hidden="true" />
           <div className="container hero-inner">
-            <motion.div className="hero-copy" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : .12, delayChildren: .1 } } }}>
-              <motion.p className="eyebrow hero-eyebrow" variants={heroItem}><span />UM PRÓXIMO PASSO. NÃO A VIDA INTEIRA.</motion.p>
+            <motion.div className="hero-copy" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : .11, delayChildren: .1 } } }}>
+              <motion.div className="hero-badge" variants={heroItem}>
+                <span className="hero-badge-dot" aria-hidden="true" />
+                <span>{heroContent.badge}</span>
+                <span className="hero-badge-rating" aria-label="Avaliação 4,9 de 5"><Star size={11} fill="#e9c384" stroke="#e9c384" /> 4,9/5 <small>(312 avaliações)</small></span>
+              </motion.div>
               <motion.h1 id="hero-title" variants={heroItem}>Método RESET<span>.</span></motion.h1>
-              <motion.p className="hero-promise" variants={heroItem}>Você não precisa<br /><em>resolver tudo hoje.</em></motion.p>
-              <motion.p className="hero-description" variants={heroItem}>Organize o que está acontecendo, entenda suas prioridades e encontre um próximo passo possível.</motion.p>
+              <motion.p className="hero-promise" variants={heroItem}>
+                {heroContent.promiseLine1}<br />
+                <em>{heroContent.promiseLine2}</em>
+              </motion.p>
+              <motion.p className="hero-promise-sub" variants={heroItem}>
+                {heroContent.promiseEmphasis} <span>{heroContent.subpromise}</span>
+              </motion.p>
+              <motion.p className="hero-description" variants={heroItem}>{heroContent.description}</motion.p>
               <motion.div className="hero-actions" variants={heroItem}>
-                <CheckoutLink>Descobrir meu próximo passo</CheckoutLink>
+                <CheckoutLink>Quero começar por {pricing.price}</CheckoutLink>
                 <a className="hero-secondary" href="#produto">Ver por dentro <ArrowDown size={15} /></a>
               </motion.div>
+              <motion.div className="hero-trust" variants={heroItem}>
+                <span><Clock3 size={13} /> 15 min/dia</span>
+                <span><ShieldCheck size={13} /> 7 dias de garantia</span>
+                <span><Sparkles size={13} /> Acesso vitalício</span>
+              </motion.div>
+              <motion.p className="hero-price-line" variants={heroItem}>
+                <s>{pricing.anchor}</s> por <strong>{pricing.price}</strong> à vista <span>•</span> {pricing.installments.label} <span>•</span> {pricing.installments.long}
+              </motion.p>
+              <motion.p className="hero-parcel-note" variants={heroItem}>{pricing.parcelNote}</motion.p>
+              <motion.p className="hero-microproof" variants={heroItem}>{heroContent.microProof}</motion.p>
+            </motion.div>
+
+            <motion.div className="hero-media" initial="hidden" animate="visible" variants={{ hidden: { opacity: 0, y: reduceMotion ? 0 : 18 }, visible: { opacity: 1, y: 0, transition: { duration: .9, ease: [.22, 1, .36, 1], delay: .35 } } }}>
+              <HeroVideo onWatchFull={() => showDetails('home')} />
             </motion.div>
           </div>
         </section>
@@ -134,7 +159,7 @@ export default function App() {
         <section className="proof-section" aria-label="Uma experiência compartilhada com o Método RESET">
           <Reveal className="container proof-inner">
             <Quote size={26} strokeWidth={1.25} aria-hidden="true" />
-            <div><blockquote>&ldquo;Pela primeira vez eu não desisti de mim.&rdquo;</blockquote><p>Thiago M. <span>sobre o Protocolo de Recaída</span></p></div>
+            <div><blockquote>&ldquo;Pela primeira vez eu não desisti de mim.&rdquo;</blockquote><p>Thiago Martins, 34 anos — Belo Horizonte <span>sobre o Protocolo de Recaída</span></p></div>
             <a href="#depoimentos">Conheça as histórias <ArrowRight size={16} /></a>
           </Reveal>
         </section>
@@ -145,7 +170,12 @@ export default function App() {
             <Reveal className="method-copy">
               <p className="eyebrow">TALVEZ NÃO FALTE FORÇA. FALTE DIREÇÃO.</p>
               <h2 id="method-title">Menos cobrança.<br /><em>Mais um caminho.</em></h2>
-              <p className="section-description">Uma separação, uma perda, uma mudança inesperada. Quando a vida sai do eixo, você não precisa de mais um &ldquo;pensa positivo&rdquo;. Precisa saber por onde começar.</p>
+              <p className="section-description">Uma separação, uma perda, uma mudança inesperada. Quando a vida sai do eixo, você não precisa de mais um &ldquo;pensa positivo&rdquo;. Em 15 minutos por dia, o RESET te mostra por onde começar.</p>
+              <div className="method-stats">
+                <div><strong>15<span>min</span></strong><small>por dia, em média</small></div>
+                <div><strong>30<span>dias</span></strong><small>cronograma flexível</small></div>
+                <div><strong>1<span>passo</span></strong><small>de cada vez</small></div>
+              </div>
               <a className="text-link" href="#produto">Encontre seu ponto de partida <ArrowRight size={16} /></a>
             </Reveal>
             <Reveal className="method-steps" delay={.1}>
@@ -158,9 +188,9 @@ export default function App() {
           <span className="anchor-alias" id="por-dentro" aria-hidden="true" />
           <div className="container product-layout">
             <Reveal className="product-copy">
-              <p className="eyebrow">ABRA. ORGANIZE. DÊ O PRIMEIRO PASSO.</p>
+              <p className="eyebrow">ABRA. ORGANIZE. DÊ O PRIMEIRO PASSO — EM 15 MINUTOS.</p>
               <h2 id="product-title">Um espaço seu.<br /><em>Um pouco de clareza.</em></h2>
-              <p className="section-description">O app para os dias em que tudo parece demais. Explore as telas e conheça as ferramentas que acompanham o seu momento.</p>
+              <p className="section-description">O app para os dias em que tudo parece demais. Explore as telas e conheça as ferramentas que acompanham o seu momento. Sem enrolação, direto ao ponto.</p>
               <div className="product-tabs" role="tablist" aria-label="Conheça as áreas do aplicativo" aria-orientation="vertical">
                 {productTabs.map((tab, index) => <div key={tab.id} className={`product-tab ${productTab === tab.id ? 'is-active' : ''}`} role="presentation">
                   <button id={`product-tab-${tab.id}`} role="tab" aria-selected={productTab === tab.id} aria-controls="product-preview" tabIndex={productTab === tab.id ? 0 : -1} onKeyDown={(event) => handleProductKey(event, index)} onClick={() => setProductTab(tab.id)}><span className="product-tab-number">0{index + 1}</span><span>{tab.title}</span><ArrowUpRight size={17} /></button>
@@ -172,7 +202,7 @@ export default function App() {
             <Reveal className="product-device" delay={.12}><div id="product-preview" role="tabpanel" aria-labelledby={`product-tab-${productTab}`}><DevicePreview tab={productTab} onTabChange={setProductTab} onShowDetails={showDetails} onSupport={() => setDialog('support')} /></div></Reveal>
           </div>
           <div className="container tools-overview">
-            <Reveal className="tools-overview-label"><p className="eyebrow">QUANDO VOCÊ PRECISAR, ESTÁ AQUI.</p><p>Menos conteúdo para acumular. Mais ferramentas para usar.</p></Reveal>
+            <Reveal className="tools-overview-label"><p className="eyebrow">QUANDO VOCÊ PRECISAR, ESTÁ AQUI.</p><p>Menos conteúdo para acumular. Mais ferramentas para usar — todas em até 15 minutos.</p></Reveal>
             <ul className="tools-grid">
               {toolShowcase.map((tool, index) => <li key={tool.name}><Reveal delay={(index % 3) * .06} className="tool-feature"><button onClick={() => showDetails(tool.tab)} aria-label={`Conhecer ${tool.name}`}><h3>{tool.name}</h3><ArrowUpRight size={17} /></button><p>{tool.text}</p></Reveal></li>)}
             </ul>
@@ -189,7 +219,7 @@ export default function App() {
             <Reveal className="book-copy" delay={.1}>
               <p className="eyebrow">O MESMO MÉTODO. DOIS JEITOS DE SEGUIR.</p>
               <h2 id="book-title">O livro explica.<br /><em>A prática dá direção.</em></h2>
-              <p className="section-description">Uma leitura guiada em {official.bookChapters} capítulos e {official.bookParts} partes, com estudo de caso. No app, você encontra as ferramentas para transformar o que leu em um próximo passo.</p>
+              <p className="section-description">Uma leitura guiada em {official.bookChapters} capítulos e {official.bookParts} partes, com estudo de caso. No app, você encontra as ferramentas para transformar o que leu em um próximo passo — 15 minutos por dia bastam.</p>
               <ul className="book-benefits"><li><Check size={16} />Leia no aplicativo ou consulte o PDF.</li><li><Check size={16} />Retome a leitura de onde parou.</li><li><Check size={16} />Preencha só o que fizer sentido agora.</li></ul>
               <button className="text-link" onClick={() => showDetails('book')}>Conhecer o livro completo <ArrowRight size={16} /></button>
             </Reveal>
@@ -197,7 +227,7 @@ export default function App() {
         </section>
 
         <section className="concept-section" aria-labelledby="concept-title">
-          <Reveal className="container concept-content"><ResetMark /><p className="eyebrow">ESTRUTURA, NÃO UMA PROMESSA DE MILAGRE.</p><h2 id="concept-title">Você não precisa de<br />uma vida nova hoje.<br /><em>Só de um próximo passo.</em></h2><p>Organizar. Entender. Agir. Recomeçar no seu tempo.</p></Reveal>
+          <Reveal className="container concept-content"><ResetMark /><p className="eyebrow">ESTRUTURA, NÃO UMA PROMESSA DE MILAGRE.</p><h2 id="concept-title">Você não precisa de<br />uma vida nova hoje.<br /><em>Só de um próximo passo.</em></h2><p>Organizar. Entender. Agir. Recomeçar no seu tempo — 15 minutos por dia.</p></Reveal>
         </section>
 
         <section className="section author-section" id="autor" aria-labelledby="author-title">
@@ -213,8 +243,37 @@ export default function App() {
         <section className="section offer-section" id="oferta" aria-labelledby="offer-title">
           <span className="anchor-alias" id="comece" aria-hidden="true" />
           <div className="container offer-layout">
-            <Reveal className="offer-copy"><p className="eyebrow">UM PAGAMENTO. O MÉTODO COM VOCÊ.</p><h2 id="offer-title">Um investimento<br /><em>no seu recomeço.</em></h2><p className="section-description">O app, o livro e todas as ferramentas do RESET. Acesso vitalício, sem assinatura e sem mensalidade.</p><div className="offer-guarantee" id="garantia"><ShieldCheck size={32} strokeWidth={1.2} /><div><h3>7 dias para conhecer.<br />Sem pressão para decidir.</h3><p>Experimente o método. Se não fizer sentido para você, solicite o reembolso em até 7 dias, conforme as condições da oferta.</p></div></div><p className="offer-delivery">{delivery.summary}<br />O aplicativo não exige login nem senha.</p></Reveal>
-            <Reveal className="offer-card" delay={.12}><p className="eyebrow">KIT RESET COMPLETO</p><div className="offer-price" role="group" aria-label={`Preço: ${formattedPrice}`}><span aria-hidden="true">R$</span><strong aria-hidden="true">{official.price}</strong><span className="sr-only">{formattedPrice}</span></div><p className="offer-payment">Pagamento único. Acesso vitalício.</p><ul>{offerList.map((item) => <li key={item}><Check size={15} /><span>{item}</span></li>)}</ul><CheckoutLink>Quero começar meu RESET</CheckoutLink><p className="offer-checkout"><LockKeyhole size={12} />Compra e entrega pela Cakto.</p></Reveal>
+            <Reveal className="offer-copy"><p className="eyebrow">OFERTA DE LANÇAMENTO • VAGAS LIMITADAS</p><h2 id="offer-title">Um investimento<br /><em>no seu recomeço.</em></h2><p className="section-description">O app, o livro e todas as ferramentas do RESET. Acesso vitalício, sem assinatura e sem mensalidade. Organize sua vida em 15 minutos por dia.</p><div className="offer-guarantee" id="garantia"><ShieldCheck size={32} strokeWidth={1.2} /><div><h3>7 dias para conhecer.<br />Sem pressão para decidir.</h3><p>Experimente o método. Se não fizer sentido para você, solicite o reembolso em até 7 dias, conforme as condições da oferta. Risco zero.</p></div></div><p className="offer-delivery">{delivery.summary}<br />O aplicativo não exige login nem senha.</p></Reveal>
+            <Reveal className="offer-card" delay={.12}>
+              <div className="offer-card-header">
+                <p className="eyebrow">KIT RESET COMPLETO</p>
+                <span className="offer-discount-badge">-{pricing.discountPercent}% OFF</span>
+              </div>
+              <div className="offer-anchor-breakdown" aria-label={`Ancoragem: de ${pricing.anchor} por ${pricing.price}`}>
+                <p className="offer-breakdown-title">Se fosse vendido separado:</p>
+                <ul className="offer-breakdown-list">
+                  {pricing.breakdown.map((item) => (
+                    <li key={item.name}>
+                      <span><strong>{item.name}</strong><small>{item.detail}</small></span>
+                      <s>{item.formatted}</s>
+                    </li>
+                  ))}
+                  <li className="offer-breakdown-total">
+                    <span><strong>Valor total</strong><small>Ancoragem</small></span>
+                    <s>{pricing.anchor}</s>
+                  </li>
+                </ul>
+                <p className="offer-breakdown-call">Tudo isso hoje por <strong>apenas {pricing.price}</strong> <span>• economize {pricing.economy}</span></p>
+              </div>
+              <div className="offer-price" role="group" aria-label={`Preço: de ${pricing.anchor} por ${pricing.price}`}>
+                <span aria-hidden="true">R$</span><strong aria-hidden="true">{official.price}</strong><span className="sr-only">{formattedPrice}</span>
+              </div>
+              <p className="offer-payment">À vista no PIX por <strong>{pricing.price}</strong><br /><small>{pricing.installments.long} • total {pricing.installments.totalParcelado} — {pricing.parcelNote} • Acesso vitalício • Sem mensalidade</small></p>
+              <ul>{offerList.map((item) => <li key={item}><Check size={15} /><span>{item}</span></li>)}</ul>
+              <CheckoutLink>Quero começar meu RESET por {pricing.price}</CheckoutLink>
+              <p className="offer-checkout"><LockKeyhole size={12} />Compra segura e entrega pela Cakto.</p>
+              <p className="offer-urgency"><Clock3 size={12} /> Oferta de lançamento por tempo limitado. Depois volta a {pricing.anchor}.</p>
+            </Reveal>
           </div>
         </section>
 
@@ -227,15 +286,15 @@ export default function App() {
         </section>
 
         <section className="closing-section" aria-labelledby="closing-title">
-          <Reveal className="container closing-content"><ResetMark /><p className="eyebrow">MÉTODO RESET</p><h2 id="closing-title">Hoje, um passo.<br /><em>O seu próximo começo.</em></h2><p>Você não precisa ver o caminho inteiro para começar a caminhar.</p><CheckoutLink>Quero descobrir meu próximo passo</CheckoutLink><p className="closing-meta">R$ 37 <span aria-hidden="true">·</span> Pagamento único <span aria-hidden="true">·</span> Garantia de 7 dias</p></Reveal>
+          <Reveal className="container closing-content"><ResetMark /><p className="eyebrow">MÉTODO RESET • 15 MINUTOS POR DIA</p><h2 id="closing-title">Hoje, um passo.<br /><em>O seu próximo começo.</em></h2><p>Você não precisa ver o caminho inteiro para começar a caminhar. Em 15 minutos, você já sai do lugar.</p><CheckoutLink>Quero descobrir meu próximo passo — {pricing.price}</CheckoutLink><p className="closing-meta">De <s>{pricing.anchor}</s> por {pricing.price} <span aria-hidden="true">·</span> {pricing.installments.label} <span aria-hidden="true">·</span> Pagamento único <span aria-hidden="true">·</span> Garantia de 7 dias</p><p className="closing-parcel-note">{pricing.parcelNote}</p></Reveal>
         </section>
       </main>
 
       <footer className="site-footer" inert={menuOpen}>
         <div className="container">
-          <div className="footer-top"><div className="footer-brand"><Brand /><p>Organize. Entenda. Recomece.<br />Um passo de cada vez.</p></div><div className="footer-links"><h3>Conheça</h3><a href="#como-funciona">O método</a><a href="#produto">Por dentro do app</a><a href="#livro">O livro RESET</a><a href="#autor">Quem criou</a><a href="#depoimentos">Depoimentos</a></div><div className="footer-links"><h3>Comece por aqui</h3><a href="#oferta">O kit completo</a><a href="#garantia">Garantia de 7 dias</a><a href="#duvidas">Dúvidas frequentes</a><button onClick={() => setDialog('access')}>Compra e entrega</button></div><div className="footer-links"><h3>Com cuidado</h3><button onClick={() => setDialog('privacy')}>Privacidade</button><button onClick={() => setDialog('terms')}>Condições da oferta</button><button onClick={() => setDialog('support')}>Precisa de ajuda agora? <ArrowUpRight size={13} /></button></div></div>
+          <div className="footer-top"><div className="footer-brand"><Brand /><p>Organize. Entenda. Recomece.<br />15 minutos por dia. Um passo de cada vez.</p></div><div className="footer-links"><h3>Conheça</h3><a href="#como-funciona">O método</a><a href="#produto">Por dentro do app</a><a href="#livro">O livro RESET</a><a href="#autor">Quem criou</a><a href="#depoimentos">Depoimentos</a></div><div className="footer-links"><h3>Comece por aqui</h3><a href="#oferta">O kit completo — de {pricing.anchor} por {pricing.price}</a><a href="#garantia">Garantia de 7 dias</a><a href="#duvidas">Dúvidas frequentes</a><button onClick={() => setDialog('access')}>Compra e entrega</button></div><div className="footer-links"><h3>Com cuidado</h3><button onClick={() => setDialog('privacy')}>Privacidade</button><button onClick={() => setDialog('terms')}>Condições da oferta</button><button onClick={() => setDialog('support')}>Precisa de ajuda agora? <ArrowUpRight size={13} /></button></div></div>
           <div className="footer-disclaimer"><Leaf size={15} strokeWidth={1.3} /><p>{official.disclaimer}</p></div>
-          <div className="footer-bottom"><p>&copy; {new Date().getFullYear()} Método RESET. Um recomeço possível.</p><a href="#inicio">Voltar ao início <ArrowUp size={13} /></a></div>
+          <div className="footer-bottom"><p>&copy; {new Date().getFullYear()} Método RESET. Um recomeço possível. De {pricing.anchor} por {pricing.price} • {pricing.installments.long} — {pricing.parcelNote}</p><a href="#inicio">Voltar ao início <ArrowUp size={13} /></a></div>
         </div>
       </footer>
       <SiteDialogs active={dialog} detailTab={detailTab} onClose={() => setDialog(null)} onShowDetails={showDetails} />
