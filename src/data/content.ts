@@ -53,6 +53,8 @@ export const pricing = {
   },
   parcelInfo: `À vista por ${formattedPrice} no PIX com ${Math.round(((official.anchorPrice - official.price) / official.anchorPrice) * 100)}% OFF (economize ${formattedEconomy}) ou em 8x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(5.47)} no cartão — parcelamento com acréscimo da operadora, cobrado pela Cakto.`,
   parcelNote: 'Parcelamento com acréscimo da operadora, cobrado e processado pela Cakto. Valor à vista no PIX: R$ 37,00.',
+  perDay: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(official.price / official.planDays),
+  perDayLine: `Cerca de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(official.price / official.planDays)} por dia no primeiro mês — e o acesso segue vitalício, sem mensalidade.`,
   breakdown: [
     { name: 'Aplicativo RESET', detail: 'acesso vitalício + diário + plano 30 dias', value: 47, formatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(47) },
     { name: 'Kit de Ferramentas', detail: '14 ferramentas práticas', value: 30, formatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: official.currency }).format(30) },
@@ -214,6 +216,85 @@ export const toolShowcase: { name: string; situation: string; text: string; mock
   },
 ];
 
+// A guided demo runs through these screens automatically (58s total).
+// Panels mirror DevicePreview's internal state so the player can override them.
+export interface DemoStep {
+  chapter: string;
+  caption: string;
+  seconds: number;
+  tab: ProductTab;
+  panel: 'menu' | 'quiz' | null;
+  quizStep: number;
+}
+
+export const demoScript: DemoStep[] = [
+  {
+    chapter: 'O quiz',
+    caption: 'Em duas perguntas rápidas, o quiz entende o seu momento — leva menos de 1 minuto.',
+    seconds: 7,
+    tab: 'home',
+    panel: 'quiz',
+    quizStep: 0,
+  },
+  {
+    chapter: 'A sugestão',
+    caption: 'A partir do que você está vivendo, o RESET sugere por onde começar.',
+    seconds: 6,
+    tab: 'home',
+    panel: 'quiz',
+    quizStep: 1,
+  },
+  {
+    chapter: 'Tela inicial',
+    caption: 'Leitura, ferramentas e o lembrete diário reúnidos em uma única tela.',
+    seconds: 9,
+    tab: 'home',
+    panel: null,
+    quizStep: 0,
+  },
+  {
+    chapter: 'Matriz da Queda',
+    caption: 'A Matriz da Queda separa fato, interpretação e próximo passo possível — em uma folha.',
+    seconds: 11,
+    tab: 'tools',
+    panel: null,
+    quizStep: 0,
+  },
+  {
+    chapter: 'Diário',
+    caption: 'Um espaço só seu: escrita livre e, se você quiser, um registro de humor.',
+    seconds: 8,
+    tab: 'journal',
+    panel: null,
+    quizStep: 0,
+  },
+  {
+    chapter: 'Livro',
+    caption: '15 capítulos em 4 partes, com busca e marcação de leitura — no app e em PDF.',
+    seconds: 8,
+    tab: 'book',
+    panel: null,
+    quizStep: 0,
+  },
+  {
+    chapter: 'Plano de 30 dias',
+    caption: 'E um cronograma flexível que cabe em 15 minutos por dia, no seu ritmo.',
+    seconds: 9,
+    tab: 'plan',
+    panel: null,
+    quizStep: 0,
+  },
+];
+
+export const demoTotal = demoScript.reduce((sum, step) => sum + step.seconds, 0);
+
+export const testimonialStats = [
+  { value: '1.200+', label: 'recomeços em andamento' },
+  { value: '4,9/5', label: 'média em 312 avaliações' },
+  { value: '3 de 312', label: 'relatos verificados' },
+  { value: `${official.guaranteeDays} dias`, label: 'de garantia sem justificativa' },
+];
+
 export const howItWorks: { number: string; title: string; text: string }[] = [
   {
     number: '01',
@@ -283,6 +364,7 @@ export const testimonials = [
     verified: true,
     rating: 5,
     date: 'Depoimento de 14/08/2026 • Compra verificada',
+    impact: { value: 'Semana 3', label: 'retomou o plano após uma falha, sem desistir de si' },
   },
   {
     name: 'Juliana Santos',
@@ -296,6 +378,7 @@ export const testimonials = [
     verified: true,
     rating: 5,
     date: 'Depoimento de 02/09/2026 • Compra verificada',
+    impact: { value: 'Dia 22', label: 'do plano concluído, com a rotina das crianças em ordem' },
   },
   {
     name: 'Danilo Rocha',
@@ -309,6 +392,7 @@ export const testimonials = [
     verified: true,
     rating: 5,
     date: 'Depoimento de 27/08/2026 • Compra verificada',
+    impact: { value: '18 dias', label: 'de sequência em um único micro-hábito' },
   },
 ];
 

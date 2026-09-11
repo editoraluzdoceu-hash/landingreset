@@ -1,15 +1,18 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, Quote, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
 import AccordionItem from './components/AccordionItem';
 import { Brand, ResetMark } from './components/Brand';
 import CheckoutLink from './components/CheckoutLink';
-import DevicePreview from './components/DevicePreview';
 import HeroVideo from './components/HeroVideo';
+import NextStep from './components/NextStep';
 import Reveal from './components/Reveal';
-import SiteDialogs, { type SiteDialogKind } from './components/SiteDialogs';
-import Testimonials from './components/Testimonials';
 import { delivery, faqs, formattedPrice, founder, heroContent, howItWorks, offerList, official, pricing, productTabs, toolShowcase, type ProductTab } from './data/content';
+
+// Lazy — abaixo da dobra: reduz JS crítico / TTI e melhora LCP
+const DevicePreview = lazy(() => import('./components/DevicePreview'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const SiteDialogs = lazy(() => import('./components/SiteDialogs'));
 
 const navLinks = [
   { href: 'como-funciona', label: 'O método' },
@@ -25,7 +28,7 @@ export default function App() {
   const [methodStep, setMethodStep] = useState<number | null>(0);
   const [productTab, setProductTab] = useState<ProductTab>('home');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [dialog, setDialog] = useState<SiteDialogKind>(null);
+  const [dialog, setDialog] = useState<import('./components/SiteDialogs').SiteDialogKind>(null);
   const [detailTab, setDetailTab] = useState<ProductTab>('home');
   const menuToggle = useRef<HTMLButtonElement>(null);
   const mobileNav = useRef<HTMLElement>(null);
@@ -114,16 +117,21 @@ export default function App() {
       </header>
       {menuOpen && <button className="mobile-scrim" tabIndex={-1} aria-label="Fechar navegação" onClick={() => setMenuOpen(false)} />}
 
-      <main id="main-content" tabIndex={-1} inert={menuOpen}>
+      <main id="main-content" tabIndex={-1} inert={menuOpen ? true as unknown as boolean : undefined}>
         <section id="inicio" className="hero hero-with-video" aria-labelledby="hero-title">
-          <picture className="hero-picture" aria-hidden="true"><source media="(max-width: 767px)" srcSet="/images/reset-hero-mobile.jpg" /><img src="/images/reset-hero.jpg" alt="" fetchPriority="high" decoding="async" /></picture>
+          <picture className="hero-picture" aria-hidden="true">
+            <source media="(max-width: 767px)" srcSet="/images/reset-hero-mobile.webp" type="image/webp" />
+            <source media="(max-width: 767px)" srcSet="/images/reset-hero-mobile.jpg" />
+            <source srcSet="/images/reset-hero.webp" type="image/webp" />
+            <img src="/images/reset-hero.jpg" alt="" width={1376} height={768} fetchPriority="high" decoding="async" loading="eager" />
+          </picture>
           <div className="hero-shade" aria-hidden="true" />
           <div className="container hero-inner">
             <motion.div className="hero-copy" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : .11, delayChildren: .1 } } }}>
               <motion.div className="hero-badge" variants={heroItem}>
                 <span className="hero-badge-dot" aria-hidden="true" />
                 <span>{heroContent.badge}</span>
-                <span className="hero-badge-rating" aria-label="Avaliação 4,9 de 5"><Star size={11} fill="#e9c384" stroke="#e9c384" /> 4,9/5 <small>(312 avaliações)</small></span>
+                <span className="hero-badge-rating" aria-label="Avaliação 4,9 de 5, 3 de 312 relatos verificados"><Star size={11} fill="#e9c384" stroke="#e9c384" /> 4,9/5 <small>• 3 de 312 relatos verificados</small></span>
               </motion.div>
               <motion.h1 id="hero-title" variants={heroItem}>Método RESET<span>.</span></motion.h1>
               <motion.p className="hero-promise" variants={heroItem}>
@@ -134,10 +142,23 @@ export default function App() {
                 {heroContent.promiseEmphasis} <span>{heroContent.subpromise}</span>
               </motion.p>
               <motion.p className="hero-description" variants={heroItem}>{heroContent.description}</motion.p>
-              <motion.div className="hero-actions" variants={heroItem}>
-                <CheckoutLink>Quero começar por {pricing.price}</CheckoutLink>
-                <a className="hero-secondary" href="#produto">Ver por dentro <ArrowDown size={15} /></a>
+
+              {/* CTA principal — próximo passo explícito */}
+              <motion.div className="hero-cta-group" variants={heroItem}>
+                <div>
+                  <CheckoutLink id="hero-cta" ariaDescribedby="hero-next-step-hint">Quero começar por {pricing.price} — checkout em 30s</CheckoutLink>
+                  <p id="hero-next-step-hint" className="hero-cta-clarity">
+                    Você vai para o <strong>checkout seguro da Cakto</strong> (PIX ou cartão). <strong>Próximo passo:</strong> pagamento → confirmação imediata → link para baixar liberado na Cakto. Sem login, sem mensalidade.
+                  </p>
+                  <span className="cta-hint"><LockKeyhole size={11} aria-hidden="true" /> Checkout criptografado • <ShieldCheck size={11} aria-hidden="true" /> Garantia 7 dias</span>
+                </div>
+                <a className="hero-secondary" href="#produto">Ver por dentro — tour de 58s <ArrowDown size={15} /></a>
               </motion.div>
+
+              <motion.div variants={heroItem}>
+                <NextStep />
+              </motion.div>
+
               <motion.div className="hero-trust" variants={heroItem}>
                 <span><Clock3 size={13} /> 15 min/dia</span>
                 <span><ShieldCheck size={13} /> 7 dias de garantia</span>
@@ -151,14 +172,14 @@ export default function App() {
             </motion.div>
 
             <motion.div className="hero-media" initial="hidden" animate="visible" variants={{ hidden: { opacity: 0, y: reduceMotion ? 0 : 18 }, visible: { opacity: 1, y: 0, transition: { duration: .9, ease: [.22, 1, .36, 1], delay: .35 } } }}>
-              <HeroVideo onWatchFull={() => showDetails('home')} />
+              <HeroVideo onExplore={() => document.getElementById('produto')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' })} onWatchFull={() => showDetails('home')} />
             </motion.div>
           </div>
         </section>
 
         <section className="proof-section" aria-label="Uma experiência compartilhada com o Método RESET">
           <Reveal className="container proof-inner">
-            <Quote size={26} strokeWidth={1.25} aria-hidden="true" />
+            <img className="proof-avatar" src="/images/testimonials/thiago.webp" srcSet="/images/testimonials/thiago.webp 1x, /images/testimonials/thiago.jpg 1x" alt="Foto de Thiago Martins" width={44} height={44} loading="lazy" decoding="async" />
             <div><blockquote>&ldquo;Pela primeira vez eu não desisti de mim.&rdquo;</blockquote><p>Thiago Martins, 34 anos — Belo Horizonte <span>sobre o Protocolo de Recaída</span></p></div>
             <a href="#depoimentos">Conheça as histórias <ArrowRight size={16} /></a>
           </Reveal>
@@ -199,7 +220,13 @@ export default function App() {
               </div>
               <button className="text-link" onClick={() => showDetails(productTab)}>Conhecer os detalhes <ArrowRight size={16} /></button>
             </Reveal>
-            <Reveal className="product-device" delay={.12}><div id="product-preview" role="tabpanel" aria-labelledby={`product-tab-${productTab}`}><DevicePreview tab={productTab} onTabChange={setProductTab} onShowDetails={showDetails} onSupport={() => setDialog('support')} /></div></Reveal>
+            <Reveal className="product-device" delay={.12}>
+              <div id="product-preview" role="tabpanel" aria-labelledby={`product-tab-${productTab}`}>
+                <Suspense fallback={<div style={{ minHeight: 520, display: 'grid', placeItems: 'center', color: '#a19684', fontSize: 12 }}>Carregando prévia…</div>}>
+                  <DevicePreview tab={productTab} onTabChange={setProductTab} onShowDetails={showDetails} onSupport={() => setDialog('support')} />
+                </Suspense>
+              </div>
+            </Reveal>
           </div>
           <div className="container tools-overview">
             <Reveal className="tools-overview-label"><p className="eyebrow">QUANDO VOCÊ PRECISAR, ESTÁ AQUI.</p><p>Menos conteúdo para acumular. Mais ferramentas para usar — todas em até 15 minutos.</p></Reveal>
@@ -238,12 +265,16 @@ export default function App() {
           </div>
         </section>
 
-        <Testimonials />
+        <Suspense fallback={null}>
+          <Testimonials />
+        </Suspense>
 
         <section className="section offer-section" id="oferta" aria-labelledby="offer-title">
           <span className="anchor-alias" id="comece" aria-hidden="true" />
           <div className="container offer-layout">
-            <Reveal className="offer-copy"><p className="eyebrow">OFERTA DE LANÇAMENTO • VAGAS LIMITADAS</p><h2 id="offer-title">Um investimento<br /><em>no seu recomeço.</em></h2><p className="section-description">O app, o livro e todas as ferramentas do RESET. Acesso vitalício, sem assinatura e sem mensalidade. Organize sua vida em 15 minutos por dia.</p><div className="offer-guarantee" id="garantia"><ShieldCheck size={32} strokeWidth={1.2} /><div><h3>7 dias para conhecer.<br />Sem pressão para decidir.</h3><p>Experimente o método. Se não fizer sentido para você, solicite o reembolso em até 7 dias, conforme as condições da oferta. Risco zero.</p></div></div><p className="offer-delivery">{delivery.summary}<br />O aplicativo não exige login nem senha.</p></Reveal>
+            <Reveal className="offer-copy"><p className="eyebrow">OFERTA DE LANÇAMENTO • VAGAS LIMITADAS</p><h2 id="offer-title">Um investimento<br /><em>no seu recomeço.</em></h2><p className="section-description">O app, o livro e todas as ferramentas do RESET. Acesso vitalício, sem assinatura e sem mensalidade. Organize sua vida em 15 minutos por dia.</p>
+            <NextStep variant="card" />
+            <div className="offer-guarantee" id="garantia"><ShieldCheck size={32} strokeWidth={1.2} /><div><h3>7 dias para conhecer.<br />Sem pressão para decidir.</h3><p>Experimente o método. Se não fizer sentido para você, solicite o reembolso em até 7 dias, conforme as condições da oferta. Risco zero.</p></div></div><p className="offer-delivery">{delivery.summary}<br />O aplicativo não exige login nem senha.</p></Reveal>
             <Reveal className="offer-card" delay={.12}>
               <div className="offer-card-header">
                 <p className="eyebrow">KIT RESET COMPLETO</p>
@@ -269,8 +300,10 @@ export default function App() {
                 <span aria-hidden="true">R$</span><strong aria-hidden="true">{official.price}</strong><span className="sr-only">{formattedPrice}</span>
               </div>
               <p className="offer-payment">À vista no PIX por <strong>{pricing.price}</strong><br /><small>{pricing.installments.long} • total {pricing.installments.totalParcelado} — {pricing.parcelNote} • Acesso vitalício • Sem mensalidade</small></p>
+              <p className="offer-perday"><Sparkles size={12} /> {pricing.perDayLine}</p>
               <ul>{offerList.map((item) => <li key={item}><Check size={15} /><span>{item}</span></li>)}</ul>
-              <CheckoutLink>Quero começar meu RESET por {pricing.price}</CheckoutLink>
+              <CheckoutLink id="offer-cta" ariaDescribedby="offer-hint">Quero começar meu RESET por {pricing.price} — ir para checkout</CheckoutLink>
+              <p id="offer-hint" className="cta-hint" style={{ justifyContent: 'center', marginTop: 8 }}><LockKeyhole size={11} /> Próximo passo: checkout seguro da Cakto • liberação imediata</p>
               <p className="offer-checkout"><LockKeyhole size={12} />Compra segura e entrega pela Cakto.</p>
               <p className="offer-urgency"><Clock3 size={12} /> Oferta de lançamento por tempo limitado. Depois volta a {pricing.anchor}.</p>
             </Reveal>
@@ -286,18 +319,22 @@ export default function App() {
         </section>
 
         <section className="closing-section" aria-labelledby="closing-title">
-          <Reveal className="container closing-content"><ResetMark /><p className="eyebrow">MÉTODO RESET • 15 MINUTOS POR DIA</p><h2 id="closing-title">Hoje, um passo.<br /><em>O seu próximo começo.</em></h2><p>Você não precisa ver o caminho inteiro para começar a caminhar. Em 15 minutos, você já sai do lugar.</p><CheckoutLink>Quero descobrir meu próximo passo — {pricing.price}</CheckoutLink><p className="closing-meta">De <s>{pricing.anchor}</s> por {pricing.price} <span aria-hidden="true">·</span> {pricing.installments.label} <span aria-hidden="true">·</span> Pagamento único <span aria-hidden="true">·</span> Garantia de 7 dias</p><p className="closing-parcel-note">{pricing.parcelNote}</p></Reveal>
+          <Reveal className="container closing-content"><ResetMark /><p className="eyebrow">MÉTODO RESET • 15 MINUTOS POR DIA</p><h2 id="closing-title">Hoje, um passo.<br /><em>O seu próximo começo.</em></h2><p>Você não precisa ver o caminho inteiro para começar a caminhar. Em 15 minutos, você já sai do lugar.</p>
+          <div style={{ maxWidth: 420, margin: '18px auto 0', textAlign: 'left' }}><NextStep variant="inline" /></div>
+          <CheckoutLink id="closing-cta" ariaDescribedby="closing-hint">Quero descobrir meu próximo passo — {pricing.price} • próximo: checkout</CheckoutLink><p id="closing-hint" className="cta-hint" style={{ justifyContent: 'center' }}><LockKeyhole size={11} /> Checkout seguro Cakto • PIX libera na hora</p><p className="closing-meta">De <s>{pricing.anchor}</s> por {pricing.price} <span aria-hidden="true">·</span> {pricing.installments.label} <span aria-hidden="true">·</span> Pagamento único <span aria-hidden="true">·</span> Garantia de 7 dias</p><p className="closing-parcel-note">{pricing.parcelNote}</p></Reveal>
         </section>
       </main>
 
-      <footer className="site-footer" inert={menuOpen}>
+      <footer className="site-footer" inert={menuOpen ? true as unknown as boolean : undefined}>
         <div className="container">
           <div className="footer-top"><div className="footer-brand"><Brand /><p>Organize. Entenda. Recomece.<br />15 minutos por dia. Um passo de cada vez.</p></div><div className="footer-links"><h3>Conheça</h3><a href="#como-funciona">O método</a><a href="#produto">Por dentro do app</a><a href="#livro">O livro RESET</a><a href="#autor">Quem criou</a><a href="#depoimentos">Depoimentos</a></div><div className="footer-links"><h3>Comece por aqui</h3><a href="#oferta">O kit completo — de {pricing.anchor} por {pricing.price}</a><a href="#garantia">Garantia de 7 dias</a><a href="#duvidas">Dúvidas frequentes</a><button onClick={() => setDialog('access')}>Compra e entrega</button></div><div className="footer-links"><h3>Com cuidado</h3><button onClick={() => setDialog('privacy')}>Privacidade</button><button onClick={() => setDialog('terms')}>Condições da oferta</button><button onClick={() => setDialog('support')}>Precisa de ajuda agora? <ArrowUpRight size={13} /></button></div></div>
           <div className="footer-disclaimer"><Leaf size={15} strokeWidth={1.3} /><p>{official.disclaimer}</p></div>
           <div className="footer-bottom"><p>&copy; {new Date().getFullYear()} Método RESET. Um recomeço possível. De {pricing.anchor} por {pricing.price} • {pricing.installments.long} — {pricing.parcelNote}</p><a href="#inicio">Voltar ao início <ArrowUp size={13} /></a></div>
         </div>
       </footer>
-      <SiteDialogs active={dialog} detailTab={detailTab} onClose={() => setDialog(null)} onShowDetails={showDetails} />
+      <Suspense fallback={null}>
+        <SiteDialogs active={dialog} detailTab={detailTab} onClose={() => setDialog(null)} onShowDetails={showDetails} />
+      </Suspense>
     </MotionConfig>
   );
 }

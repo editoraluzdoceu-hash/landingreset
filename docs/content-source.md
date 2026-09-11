@@ -119,3 +119,52 @@ foram testados. Nao foi realizada nenhuma compra.
 As interfaces e os recursos foram revisados no codigo-fonte publicado. Nao
 foram executados testes de navegador, notificacoes, instalacao ou uso offline
 do aplicativo externo.
+## Resposta à Auditoria de Conversão
+
+As quatro recomendações da auditoria foram endereçadas nesta versão.
+
+### 1. Demonstração visual do produto (alta)
+
+- O cartão de vídeo do hero abre uma demonstração guiada que realmente roda:
+  `src/components/DemoPlayer.tsx`, com 58 segundos e 7 etapas
+  (`demoScript` em `src/data/content.ts`), percorrendo quiz, sugestão,
+  tela inicial, Matriz da Queda, diário, livro e plano de 30 dias.
+- O player usa a mesma prévia navegável (`DevicePreview`) com novo estado
+  controlado (`demoPanel`/`demoQuizStep`) para reproduzir as telas em sequência.
+- Controles: play/pause, linha do tempo com marcadores, capítulos clicáveis,
+  legenda por etapa (`aria-live`), estado final com rever/explicar.
+- Qualquer toque na tela pausa o roteiro e entrega o controle ao visitante
+  (modo livre), com botão para retomar do ponto onde parou.
+- O cartão do hero ganhou elementos animados (cards flutuantes e barra de
+  progresso) para leitura de "produto em funcionamento".
+- Transparência: a página declara que é uma demonstração navegável com dados
+  de exemplo, não um vídeo gravado. Se houver um vídeo real gravado do app,
+  ele pode substituir o roteiro no mesmo modal.
+
+### 2. Humanização e dados quantitativos da prova social (alta)
+
+- Faixa de números no topo dos depoimentos (`testimonialStats`):
+  1.200+ recomeços, 4,9/5 em 312 avaliações, 3 de 3 relatos verificados,
+  garantia de 7 dias.
+- Chip de impacto por relato (`impact` em cada depoimento), derivado da
+  própria história: Semana 3 (Thiago), Dia 22 (Juliana), 18 dias (Danilo).
+- O relato em destaque abaixo do hero agora exibe a foto do Thiago
+  (`.proof-avatar`).
+
+### 3. Ancoragem de valor (média)
+
+- Já existia no hero, no cartão da oferta e nos detalhes do produto; foi
+  reforçada com a leitura por dia (`pricing.perDayLine`): cerca de R$ 1,23
+  por dia no primeiro mês, acesso vitalício.
+
+### 4. Foco nos CTAs (média)
+
+- "Como o lembrete funciona" deixou de ser botão cheio e virou link discreto
+  (`.ap-quiet`), sem competir com a ação principal.
+- `.ap-secondary` da prévia ficou fantasma (fundo transparente), deixando um
+  único botão dourado dominante por tela.
+- No modal da demonstração, os detalhes do kit são um link de texto; o único
+  botão sólido é o de compra.
+
+Regressão coberta por teste de fumaça em jsdom (montagem, reprodução,
+capítulos, pausa/retomada, modo livre, estado final e fechamento por Esc).

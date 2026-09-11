@@ -1,38 +1,65 @@
-import { useState } from 'react';
-import { Play, X, Clock3, ShieldCheck, Sparkles } from 'lucide-react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Clock3, Play, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { official, pricing } from '../data/content';
 
+const DemoPlayer = lazy(() => import('./DemoPlayer'));
+
 interface HeroVideoProps {
+  /** Closes the player and opens the interactive preview section. */
+  onExplore?: () => void;
+  /** Closes the player and opens the full product details. */
   onWatchFull?: () => void;
 }
 
-export default function HeroVideo({ onWatchFull }: HeroVideoProps) {
+export default function HeroVideo({ onExplore, onWatchFull }: HeroVideoProps) {
   const [open, setOpen] = useState(false);
+  const closeButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    closeButton.current?.focus();
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
+  const explore = () => {
+    setOpen(false);
+    onExplore?.();
+  };
 
   return (
     <>
       <div className="hero-video-wrap">
-        <div className="hero-video-card" role="group" aria-label="Vídeo demonstrativo do aplicativo RESET">
+        <div className="hero-video-card" role="group" aria-label="Demonstração guiada do aplicativo RESET">
           <div className="hero-video-badge">
             <span className="hero-video-dot" aria-hidden="true" />
-            <span>VÍDEO DEMONSTRATIVO • 58 SEGUNDOS</span>
-            <span className="hero-video-live">▶ AO VIVO NO APP</span>
+            <span>DEMONSTRAÇÃO GUIADA • 58 SEGUNDOS</span>
+            <span className="hero-video-live">▶ 7 ETAPAS</span>
           </div>
 
           <button
             className="hero-video-frame"
             onClick={() => setOpen(true)}
-            aria-label="Assistir vídeo demonstrativo do Método RESET — abre em janela"
+            aria-label="Assistir a demonstração guiada do Método RESET — abre em janela"
           >
-            <img
-              src="/images/hero-video-poster.jpg"
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-            />
+            <picture>
+              <source srcSet="/images/hero-video-poster.webp" type="image/webp" />
+              <img
+                src="/images/hero-video-poster.jpg"
+                alt=""
+                aria-hidden="true"
+                width={1408}
+                height={768}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+            </picture>
             <div className="hero-video-overlay" aria-hidden="true" />
-            {/* fake app UI overlay */}
+            {/* live app UI overlay */}
             <div className="hero-video-ui" aria-hidden="true">
               <div className="hv-ui-top"><span>R</span><span>MÉTODO RESET</span><span>SOS</span></div>
               <div className="hv-ui-card">
@@ -50,8 +77,8 @@ export default function HeroVideo({ onWatchFull }: HeroVideoProps) {
             <span className="hero-video-play">
               <span className="hero-video-play-icon"><Play size={22} fill="currentColor" /></span>
               <span className="hero-video-play-label">
-                <strong>Ver o app por dentro</strong>
-                <small>Sem cadastro • Prévia real</small>
+                <strong>Ver o app em funcionamento</strong>
+                <small>Guia por 7 telas • 58 segundos</small>
               </span>
             </span>
 
@@ -63,7 +90,7 @@ export default function HeroVideo({ onWatchFull }: HeroVideoProps) {
               <span><ShieldCheck size={14} /> Garantia de 7 dias</span>
               <span><Sparkles size={14} /> Acesso imediato</span>
             </div>
-            <p className="hero-video-caption">Prévia adaptada do app. O link para baixar é entregue somente na Cakto após a compra.</p>
+            <p className="hero-video-caption">Demonstração navegável da interface real, com dados de exemplo. O link para baixar é entregue somente na Cakto após a compra.</p>
           </div>
         </div>
 
@@ -93,35 +120,27 @@ export default function HeroVideo({ onWatchFull }: HeroVideoProps) {
 
       {open && (
         <div className="hero-video-modal" role="dialog" aria-modal="true" aria-labelledby="hero-video-title">
-          <button className="hero-video-scrim" aria-label="Fechar vídeo" onClick={() => setOpen(false)} />
-          <div className="hero-video-dialog">
+          <button className="hero-video-scrim" aria-label="Fechar demonstração" tabIndex={-1} onClick={() => setOpen(false)} />
+          <div className="hero-video-dialog has-demo">
             <div className="hero-video-dialog-head">
               <div>
-                <p className="eyebrow" style={{ marginBottom: 6 }}>VÍDEO DEMONSTRATIVO</p>
-                <h3 id="hero-video-title">Método RESET em 58 segundos</h3>
-                <p>Veja como o quiz sugere por onde começar, como a Matriz organiza o caos em 1 folha e como o plano de 30 dias cabe em 15 minutos por dia.</p>
+                <p className="eyebrow" style={{ marginBottom: 6 }}>DEMONSTRAÇÃO GUIADA DO APLICATIVO</p>
+                <h3 id="hero-video-title">O Método RESET em 58 segundos</h3>
+                <p>Uma volta completa pela interface: quiz, tela inicial, Matriz da Queda, diário, livro e plano de 30 dias. Toque na tela a qualquer momento para explorar sozinho.</p>
               </div>
-              <button className="icon-button" aria-label="Fechar" onClick={() => setOpen(false)}><X size={18} /></button>
+              <button ref={closeButton} className="icon-button" aria-label="Fechar demonstração" onClick={() => setOpen(false)}><X size={18} /></button>
             </div>
 
-            <div className="hero-video-player">
-              <div className="hero-video-player-placeholder">
-                <img src="/images/hero-video-poster.jpg" alt="" aria-hidden="true" />
-                <div className="hv-modal-overlay">
-                  <p><strong>Prévia interativa disponível na seção “Por dentro”</strong></p>
-                  <p>Este vídeo é uma demonstração gravada do app. A prévia navegável logo abaixo permite testar as 5 áreas (Início, Livro, Diário, Ferramentas e Plano) sem instalar nada.</p>
-                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 18 }}>
-                    <a href="#produto" className="button button-primary" onClick={() => setOpen(false)}>Explorar a prévia agora</a>
-                    <button className="button button-outline" onClick={() => { setOpen(false); onWatchFull?.(); }}>Ver detalhes completos</button>
-                  </div>
-                  <p style={{ marginTop: 16, fontSize: 11, color: '#a19684' }}>Vídeo ilustrativo. A interface real pode ter pequenas variações. De {pricing.anchor} por {pricing.price} • {pricing.installments.label} — {pricing.parcelNote}</p>
-                </div>
-              </div>
-            </div>
+            <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#a19684', fontSize: 12 }}>Carregando demonstração…</div>}>
+              <DemoPlayer autoplay onExplore={explore} />
+            </Suspense>
 
             <div className="hero-video-dialog-footer">
-              <span>Oferta: de {pricing.anchor} por {pricing.price} • {pricing.installments.label} • {pricing.parcelNote}</span>
-              <a href={official.checkoutUrl} target="_blank" rel="noopener noreferrer" className="button button-primary">Quero meu acesso por {pricing.price}</a>
+              <span>De {pricing.anchor} por {pricing.price} • {pricing.installments.label} • {pricing.parcelNote}</span>
+              <div className="hero-video-dialog-actions">
+                <button className="hero-video-quiet" onClick={() => { setOpen(false); onWatchFull?.(); }}>Detalhes completos do kit</button>
+                <a href={official.checkoutUrl} target="_blank" rel="noopener noreferrer" className="button button-primary">Quero meu acesso por {pricing.price}</a>
+              </div>
             </div>
           </div>
         </div>

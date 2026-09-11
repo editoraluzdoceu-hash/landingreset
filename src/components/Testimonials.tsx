@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { ArrowDown, ArrowUp, BadgeCheck, Quote, Star } from 'lucide-react';
-import { testimonials } from '../data/content';
+import { ArrowDown, ArrowUp, BadgeCheck, Quote, Star, TrendingUp } from 'lucide-react';
+import { testimonialStats, testimonials } from '../data/content';
 import Reveal from './Reveal';
 
 export default function Testimonials() {
@@ -14,6 +14,14 @@ export default function Testimonials() {
         <Reveal className="section-heading split-heading">
           <div><p className="eyebrow">RECOMEÇOS REAIS • HISTÓRIAS VERIFICADAS</p><h2 id="testimonials-title">Pequenos passos.<br /><em>Novos significados.</em></h2></div>
           <p className="section-description">O que pessoas reais compartilharam sobre o próprio caminho com o RESET. Fotos com autorização — vídeos e áudios disponíveis no checkout.</p>
+        </Reveal>
+        <Reveal className="testimonial-stats" delay={.05} role="group" aria-label="Números do RESET até aqui">
+          {testimonialStats.map((stat) => (
+            <div key={stat.value}>
+              <strong>{stat.value}</strong>
+              <small>{stat.label}</small>
+            </div>
+          ))}
         </Reveal>
         <div className="testimonials-grid">
           {testimonials.map((item, index) => {
@@ -36,16 +44,23 @@ export default function Testimonials() {
                       <motion.p key={isExpanded ? 'full' : 'excerpt'} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .15 }}>{isExpanded ? item.quote : `“${item.excerpt}”`}</motion.p>
                     </AnimatePresence>
                   </blockquote>
+                  <p className="testimonial-impact">
+                    <TrendingUp size={12} aria-hidden="true" />
+                    <span><strong>{item.impact.value}</strong> {item.impact.label}</span>
+                  </p>
                   <div className="testimonial-person">
-                    <img
-                      src={item.avatar}
-                      alt={`Foto de ${item.name}`}
-                      width={44}
-                      height={44}
-                      loading="lazy"
-                      decoding="async"
-                      className="testimonial-avatar"
-                    />
+                    <picture>
+                      <source srcSet={item.avatar.replace('.jpg', '.webp')} type="image/webp" />
+                      <img
+                        src={item.avatar}
+                        alt={`Foto de ${item.name}`}
+                        width={44}
+                        height={44}
+                        loading="lazy"
+                        decoding="async"
+                        className="testimonial-avatar"
+                      />
+                    </picture>
                     <div className="testimonial-person-info">
                       <strong>{item.name} <BadgeCheck size={13} className="verified-icon" aria-label="Compra verificada" /></strong>
                       <small>{item.location}</small>
@@ -60,8 +75,8 @@ export default function Testimonials() {
           })}
         </div>
         <div className="testimonial-trustbar">
-          <span><BadgeCheck size={14} /> Depoimentos de compradores verificados pela Cakto</span>
-          <span>★ 4,9/5 média (312 avaliações)</span>
+          <span><BadgeCheck size={14} /> 3 de 312 relatos verificados — compra via Cakto</span>
+          <span>★ 4,9/5 média em 312 avaliações</span>
           <span>Fotos autorizadas • nomes completos com consentimento</span>
         </div>
         <p className="testimonial-disclaimer">Relatos individuais fornecidos à marca com autorização de uso de imagem. Cada experiência é única e não representa uma garantia de resultados. Fotos reais de clientes — arquivadas no suporte.</p>
