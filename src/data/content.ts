@@ -339,6 +339,7 @@ export const founder = {
   // Enquanto o arquivo não existir, o site exibe um espaço reservado com a inicial do nome.
   photo: {
     src: '/images/author/lucas.jpg',
+    srcWebp: '/images/author/lucas.webp',
     alt: 'Retrato de Lucas de Freitas Sousa Oliveira, autor e criador do Método RESET',
     caption: 'Lucas de Freitas Sousa Oliveira',
   },

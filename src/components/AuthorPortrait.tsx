@@ -16,15 +16,18 @@ export default function AuthorPortrait() {
             <span className="author-portrait-hint">Foto do autor</span>
           </div>
         ) : (
-          <img
-            src={founder.photo.src}
-            alt={founder.photo.alt}
-            width={600}
-            height={750}
-            loading="lazy"
-            decoding="async"
-            onError={() => setMissing(true)}
-          />
+          <picture>
+            <source srcSet={founder.photo.srcWebp} type="image/webp" />
+            <img
+              src={founder.photo.src}
+              alt={founder.photo.alt}
+              width={640}
+              height={800}
+              loading="lazy"
+              decoding="async"
+              onError={() => setMissing(true)}
+            />
+          </picture>
         )}
       </div>
       <figcaption className="author-portrait-caption">{founder.photo.caption}</figcaption>

@@ -217,6 +217,12 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
 .concept-content > p:last-child { margin-top: 24px; font-size: 11px; color: #b7a990; }
 
 .author-layout { display: grid; gap: 31px; }
+/* Mobile: o texto vem primeiro; a foto do autor fica centrada abaixo dele */
+.author-heading { order: 1; }
+.author-story { order: 2; }
+.author-portrait { order: 3; }
+.author-portrait-frame { margin-inline: auto; }
+.author-portrait-caption { text-align: center; }
 /* Espaço para a foto do autor */
 .author-portrait figure { margin: 0; }
 .author-portrait-frame { position: relative; max-width: 280px; aspect-ratio: 4 / 5; padding: 10px; border: 1px solid #896a3d55; border-radius: 4px; background: linear-gradient(165deg, #1d1811, #120f0a); overflow: hidden; }
@@ -230,7 +236,6 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
 .author-heading > .eyebrow { font-size: 8px; letter-spacing: 1.6px; }
 .author-heading blockquote { color: #bda37c; font-family: var(--serif); font-size: 21px; line-height: 1.55; font-weight: 400; border-left: 1px solid #896a3d; padding-left: 22px; margin-top: 29px; max-width: 435px; }
 .author-signature { display: flex; align-items: center; gap: 17px; margin-top: 24px; }
-.author-signature > span { font-family: var(--serif); font-size: 31px; font-style: italic; letter-spacing: -1.8px; color: #dfccac; transform: rotate(-7deg); }
 .author-signature > div { border-left: 1px solid var(--line-soft); padding-left: 17px; }
 .author-signature strong { display: block; font-size: 10px; color: #d5c8b3; font-weight: 500; }
 .author-signature small { display: block; margin-top: 5px; font-size: 9px; color: var(--dim); }
@@ -389,6 +394,7 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
   .concept-content h2 { font-size: 43px; }
   .author-layout { grid-template-columns: minmax(0, 280px) minmax(0, 1fr); align-items: start; gap: 40px 56px; }
   .author-portrait { grid-column: 1; grid-row: 1; }
+  .author-portrait-caption { text-align: left; }
   .author-heading { grid-column: 2; grid-row: 1; }
   .author-heading h2 { font-size: 39px; }
   .author-signature { align-items: flex-start; }
@@ -781,7 +787,7 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
 
 /* ── Próximo passo claro + performance LCP/TTFB ── */
 
-/* Box que explica o próximo passo (3 etapas) — hero e oferta */
+/* Box que explica o próximo passo (3 etapas) — apenas na seção final */
 .next-step-box {
   margin-top: 18px;
   border: 1px solid #e9c38422;
@@ -868,9 +874,6 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
   text-align: center;
 }
 .next-step-footnote svg { color: #3fcf8e; flex-shrink: 0; }
-.hero-next-step {
-  max-width: 460px;
-}
 .hero-cta-clarity {
   margin-top: 6px;
   font-size: 9px;

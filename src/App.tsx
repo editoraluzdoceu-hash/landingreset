@@ -156,10 +156,6 @@ export default function App() {
                 <a className="hero-secondary" href="#produto">Ver por dentro — tour de 58s <ArrowDown size={15} /></a>
               </motion.div>
 
-              <motion.div variants={heroItem}>
-                <NextStep />
-              </motion.div>
-
               <motion.div className="hero-trust" variants={heroItem}>
                 <span><Clock3 size={13} /> 15 min/dia</span>
                 <span><ShieldCheck size={13} /> 7 dias de garantia</span>
@@ -262,7 +258,7 @@ export default function App() {
           <span className="anchor-alias" id="historia" aria-hidden="true" />
           <div className="container author-layout">
             <Reveal className="author-portrait" delay={.04}><AuthorPortrait /></Reveal>
-            <Reveal className="author-heading"><p className="eyebrow">ANTES DE SER UM MÉTODO, FOI MEU RECOMEÇO.</p><h2 id="author-title">Eu também precisei<br /><em>encontrar um caminho.</em></h2><blockquote>&ldquo;{founder.quote}&rdquo;</blockquote><div className="author-signature"><span>Lucas</span><div><strong>{founder.name}</strong><small>Autor e criador do Método RESET</small></div></div></Reveal>
+            <Reveal className="author-heading"><p className="eyebrow">ANTES DE SER UM MÉTODO, FOI MEU RECOMEÇO.</p><h2 id="author-title">Eu também precisei<br /><em>encontrar um caminho.</em></h2><blockquote>&ldquo;{founder.quote}&rdquo;</blockquote><div className="author-signature"><div><strong>{founder.name}</strong><small>Autor e criador do Método RESET</small></div></div></Reveal>
             <Reveal className="author-story" delay={.1}>{founder.summary.map((paragraph) => <p key={paragraph.slice(0, 40)}>{paragraph}</p>)}<button className="text-link" onClick={() => setDialog('author')}>Ler minha história completa <ArrowRight size={16} /></button></Reveal>
           </div>
         </section>
@@ -275,7 +271,6 @@ export default function App() {
           <span className="anchor-alias" id="comece" aria-hidden="true" />
           <div className="container offer-layout">
             <Reveal className="offer-copy"><p className="eyebrow">OFERTA DE LANÇAMENTO • VAGAS LIMITADAS</p><h2 id="offer-title">Um investimento<br /><em>no seu recomeço.</em></h2><p className="section-description">O app, o livro e todas as ferramentas do RESET. Acesso vitalício, sem assinatura e sem mensalidade. Organize sua vida em 15 minutos por dia.</p>
-            <NextStep variant="card" />
             <div className="offer-guarantee" id="garantia"><ShieldCheck size={32} strokeWidth={1.2} /><div><h3>7 dias para conhecer.<br />Sem pressão para decidir.</h3><p>Experimente o método. Se não fizer sentido para você, solicite o reembolso em até 7 dias, conforme as condições da oferta. Risco zero.</p></div></div><p className="offer-delivery">{delivery.summary}<br />O aplicativo não exige login nem senha.</p></Reveal>
             <Reveal className="offer-card" delay={.12}>
               <div className="offer-card-header">
@@ -322,7 +317,7 @@ export default function App() {
 
         <section className="closing-section" aria-labelledby="closing-title">
           <Reveal className="container closing-content"><ResetMark /><p className="eyebrow">MÉTODO RESET • 15 MINUTOS POR DIA</p><h2 id="closing-title">Hoje, um passo.<br /><em>O seu próximo começo.</em></h2><p>Você não precisa ver o caminho inteiro para começar a caminhar. Em 15 minutos, você já sai do lugar.</p>
-          <div style={{ maxWidth: 420, margin: '18px auto 0', textAlign: 'left' }}><NextStep variant="inline" /></div>
+          <div style={{ maxWidth: 420, margin: '18px auto 0', textAlign: 'left' }}><NextStep /></div>
           <CheckoutLink id="closing-cta" ariaDescribedby="closing-hint">Quero descobrir meu próximo passo — {pricing.price} • próximo: checkout</CheckoutLink><p id="closing-hint" className="cta-hint" style={{ justifyContent: 'center' }}><LockKeyhole size={11} /> Checkout seguro Cakto • PIX libera na hora</p><p className="closing-meta">De <s>{pricing.anchor}</s> por {pricing.price} <span aria-hidden="true">·</span> {pricing.installments.label} <span aria-hidden="true">·</span> Pagamento único <span aria-hidden="true">·</span> Garantia de 7 dias</p><p className="closing-parcel-note">{pricing.parcelNote}</p></Reveal>
         </section>
       </main>

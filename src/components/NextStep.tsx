@@ -1,14 +1,9 @@
 import { Clock3, LockKeyhole, ShieldCheck, Sparkles } from 'lucide-react';
 
-interface NextStepProps {
-  variant?: 'hero' | 'card' | 'inline';
-  className?: string;
-}
-
-export default function NextStep({ variant = 'hero', className = '' }: NextStepProps) {
-  const isHero = variant === 'hero';
+/** Box "Seu próximo passo em 3 etapas" — exibido uma única vez, na seção final da página. */
+export default function NextStep({ className = '' }: { className?: string }) {
   return (
-    <div className={`next-step-box ${isHero ? 'hero-next-step' : ''} ${className}`} role="group" aria-label="Seu próximo passo em 3 etapas">
+    <div className={`next-step-box ${className}`} role="group" aria-label="Seu próximo passo em 3 etapas">
       <p className="next-step-eyebrow">SEU PRÓXIMO PASSO — 30 SEGUNDOS</p>
       <ol className="next-step-list">
         <li>
