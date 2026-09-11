@@ -1,0 +1,18 @@
+# Netlify _headers — Reduzir TTFB com cache inteligente e cabeçalhos de performance
+# HTML: revalida sempre, mas permite CDN
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: ALLOWALL
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+
+# Imagens: cache longo + immutable (hash via build? mas como single file, ainda vale)
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# Fonts externas já têm cache próprio — garantir preconnect funciona
+
+# Single file inline — garantir compressão Brotli/Gzip no Netlify é automático, mas documentar

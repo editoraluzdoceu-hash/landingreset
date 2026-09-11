@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -759,6 +758,168 @@ h2 em { font-style: normal; color: #c6a576; font-weight: 400; }
 .hero-video-quiet { color: #cdb58f; font-size: 11px; min-height: 40px; border-bottom: 1px solid #8b724a; padding: 0 0 4px; transition: color .2s, border-color .2s; }
 .hero-video-quiet:hover { color: var(--cream); border-color: var(--gold-light); }
 .hero-video-dialog-footer span { flex: 1 1 260px; }
+
+/* ── Próximo passo claro + performance LCP/TTFB ── */
+
+/* Box que explica o próximo passo (3 etapas) — hero e oferta */
+.next-step-box {
+  margin-top: 18px;
+  border: 1px solid #e9c38422;
+  background: linear-gradient(135deg, #1a160fcc, #14110bcc);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  box-shadow: 0 8px 24px #0003;
+}
+.next-step-eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  color: #e9c384;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.next-step-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3fcf8e;
+  box-shadow: 0 0 0 5px #3fcf8e1a;
+}
+.next-step-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  list-style: none;
+  counter-reset: steps;
+}
+.next-step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.next-step-list li > span:first-child {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #211b12;
+  border: 1px solid #e9c38433;
+  color: #e9c384;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.next-step-list strong {
+  display: block;
+  color: #f3eadd;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.next-step-list small {
+  display: block;
+  color: #a19684;
+  font-size: 9px;
+  line-height: 1.5;
+  margin-top: 1px;
+}
+.next-step-list li + li {
+  position: relative;
+}
+.next-step-footnote {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e9c38414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 8px;
+  color: #8d8068;
+  text-align: center;
+}
+.next-step-footnote svg { color: #3fcf8e; flex-shrink: 0; }
+.hero-next-step {
+  max-width: 460px;
+}
+.hero-cta-clarity {
+  margin-top: 6px;
+  font-size: 9px;
+  color: #a19684;
+  line-height: 1.6;
+  max-width: 460px;
+}
+.hero-cta-clarity strong { color: #c8b89a; font-weight: 600; }
+.hero-cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+.hero-cta-group .button-primary {
+  min-height: 54px;
+  font-size: 12px;
+  box-shadow: 0 6px 22px #d9a24b2a;
+}
+.hero-cta-group .hero-secondary {
+  align-self: flex-start;
+}
+
+/* Micro-copy sob CTA principal */
+.cta-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #8d8068;
+  margin-top: 8px;
+}
+.cta-hint svg { color: #c8b89a; }
+
+/* Performance: content-visibility para secções fora da dobra */
+.method-section,
+.product-section,
+.book-section,
+.concept-section,
+.author-section,
+.testimonials-section,
+.offer-section,
+.faq-section,
+.closing-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* Mas hero nunca deve ser adiado */
+.hero-with-video { content-visibility: visible; contain-intrinsic-size: auto; }
+
+/* Hero image: melhora LCP — garante tamanho e evita CLS */
+.hero-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  content-visibility: auto;
+}
+/* Desactivar animação se preferencia por menos movimento já está acima, mas reforçar */
+@media (prefers-reduced-motion: reduce) {
+  .next-step-box { backdrop-filter: none; }
+}
+
+/* Responsivo next-step */
+@media (min-width: 768px) {
+  .next-step-list { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .next-step-list li { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .next-step-box { padding: 16px 16px 14px; }
+  .hero-cta-group .button-primary { font-size: 12.5px; }
+}
 
 @media (max-width: 719px) {
   .demo-player { grid-template-columns: 1fr; padding-inline: 14px; }

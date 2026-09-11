@@ -4,22 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0C0A08" />
-    <meta name="description" content="Organize sua vida em 15 minutos por dia: quiz, Matriz da Queda, diário e plano de 30 dias. De R$97 por R$37 à vista no PIX ou 8x de R$5,47 no cartão, acesso vitalício e garantia de 7 dias." />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Organize sua vida em 15 minutos por dia: quiz, Matriz da Queda, diário e plano de 30 dias. De R$97 por R$37 à vista no PIX ou 8x de R$5,47 no cartão, acesso vitalício e garantia de 7 dias."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Método RESET" />
     <meta property="og:title" content="Método RESET | Organize sua vida em 15 minutos por dia" />
-    <meta property="og:description" content="De R$97 por R$37 — Organize sua vida em 15 minutos por dia e encontre seu próximo passo possível. App + livro + ferramentas. Veja o vídeo de 58s." />
-    <meta property="og:image" content="/images/hero-video-poster.jpg" />
-    <meta property="og:image:alt" content="Vídeo demonstrativo do Método RESET em um celular, com a interface preta e dourada do aplicativo." />
+    <meta
+      property="og:description"
+      content="De R$97 por R$37 — Organize sua vida em 15 minutos por dia e encontre seu próximo passo possível. App + livro + ferramentas. Veja o vídeo de 58s."
+    />
+    <meta property="og:image" content="/images/hero-video-poster.webp" />
+    <meta
+      property="og:image:alt"
+      content="Vídeo demonstrativo do Método RESET em um celular, com a interface preta e dourada do aplicativo."
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Método RESET | Organize sua vida em 15 minutos por dia" />
-    <meta name="twitter:description" content="O app, o livro e as ferramentas para o seu próximo passo. De R$97 por R$37 à vista (8x de R$5,47) — acesso vitalício e garantia de 7 dias. Veja por dentro em 58s." />
-    <meta name="twitter:image" content="/images/reset-hero.jpg" />
+    <meta
+      name="twitter:description"
+      content="O app, o livro e as ferramentas para o seu próximo passo. De R$97 por R$37 à vista (8x de R$5,47) — acesso vitalício e garantia de 7 dias. Veja por dentro em 58s."
+    />
+    <meta name="twitter:image" content="/images/reset-hero.webp" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Resource hints: fonts (render-blocking) + checkout -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//pay.cakto.com.br" />
+    <link rel="preconnect" href="https://pay.cakto.com.br" crossorigin />
+
+    <!-- Fonts: non-blocking with display=swap + preload -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+
+    <!-- LCP: hero image preloads — webp first, jpg fallback via picture -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/reset-hero.webp"
+      type="image/webp"
+      imagesrcset="/images/reset-hero.webp 1376w"
+      fetchpriority="high"
+      media="(min-width: 768px)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/reset-hero-mobile.webp"
+      type="image/webp"
+      imagesrcset="/images/reset-hero-mobile.webp 848w"
+      fetchpriority="high"
+      media="(max-width: 767px)"
+    />
+    <!-- Fallback preload for browsers without webp (jpg) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/reset-hero.jpg"
+      fetchpriority="high"
+      media="(min-width: 768px)"
+      imagesrcset="/images/reset-hero.jpg 1376w"
+    />
+
+    <!-- Hero video poster — secondary LCP, preload with low-high priority -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero-video-poster.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
     <title>Método RESET | Organize sua vida em 15 minutos por dia — De R$97 por R$37</title>
+
+    <!-- Critical: avoid FOIT — use system fallback until fonts load -->
+    <style>
+      html { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+      h1, h2, h3 { font-family: Fraunces, Georgia, serif; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

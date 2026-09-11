@@ -49,15 +49,18 @@ export default function Testimonials() {
                     <span><strong>{item.impact.value}</strong> {item.impact.label}</span>
                   </p>
                   <div className="testimonial-person">
-                    <img
-                      src={item.avatar}
-                      alt={`Foto de ${item.name}`}
-                      width={44}
-                      height={44}
-                      loading="lazy"
-                      decoding="async"
-                      className="testimonial-avatar"
-                    />
+                    <picture>
+                      <source srcSet={item.avatar.replace('.jpg', '.webp')} type="image/webp" />
+                      <img
+                        src={item.avatar}
+                        alt={`Foto de ${item.name}`}
+                        width={44}
+                        height={44}
+                        loading="lazy"
+                        decoding="async"
+                        className="testimonial-avatar"
+                      />
+                    </picture>
                     <div className="testimonial-person-info">
                       <strong>{item.name} <BadgeCheck size={13} className="verified-icon" aria-label="Compra verificada" /></strong>
                       <small>{item.location}</small>
