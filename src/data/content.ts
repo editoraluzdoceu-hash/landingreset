@@ -334,6 +334,14 @@ export const appSupport = {
 export const founder = {
   name: 'Lucas de Freitas Sousa Oliveira',
   role: 'Criador do Método RESET',
+  // Espaço para a foto do autor: salve o retrato (vertical, proporção 4:5 — ex.: 600×750px)
+  // em public/images/author/lucas.jpg (aceita .jpg, .webp ou .png — ajuste o caminho abaixo).
+  // Enquanto o arquivo não existir, o site exibe um espaço reservado com a inicial do nome.
+  photo: {
+    src: '/images/author/lucas.jpg',
+    alt: 'Retrato de Lucas de Freitas Sousa Oliveira, autor e criador do Método RESET',
+    caption: 'Lucas de Freitas Sousa Oliveira',
+  },
   source: 'Prefácio do livro Método RESET',
   headline: 'Eu não criei o RESET porque descobri todas as respostas. Criei porque também precisei descobrir um caminho.',
   quote: 'Eu não escrevi este livro depois de superar tudo. Escrevi no meio do processo, e continuei escrevendo enquanto ele acontecia.',
