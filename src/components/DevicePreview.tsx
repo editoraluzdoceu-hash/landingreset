@@ -5,11 +5,16 @@ import { ResetMark } from './Brand';
 import { appNavigation, bookPreviewEntries, journey, official, quizMoments, type ProductTab } from '../data/content';
 import './DevicePreview.css';
 
+export type PreviewPanel = 'menu' | 'quiz' | null;
+
 interface DevicePreviewProps {
   tab: ProductTab;
   onTabChange: (tab: ProductTab) => void;
   onShowDetails: (tab: ProductTab) => void;
   onSupport: () => void;
+  /** When defined, the guided demo overrides the internal panel/quiz state. */
+  demoPanel?: PreviewPanel;
+  demoQuizStep?: number;
 }
 
 const viewIcons: Record<ProductTab, LucideIcon> = {
@@ -31,9 +36,11 @@ function normalizeSearch(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
 
-export default function DevicePreview({ tab, onTabChange, onShowDetails, onSupport }: DevicePreviewProps) {
-  const [panel, setPanel] = useState<'menu' | 'quiz' | null>(null);
-  const [quizStep, setQuizStep] = useState(0);
+export default function DevicePreview({ tab, onTabChange, onShowDetails, onSupport, demoPanel, demoQuizStep }: DevicePreviewProps) {
+  const [panelState, setPanelState] = useState<PreviewPanel>(null);
+  const [quizStepState, setQuizStepState] = useState(0);
+  const panel = demoPanel !== undefined ? demoPanel : panelState;
+  const quizStep = demoQuizStep !== undefined ? demoQuizStep : quizStepState;
   const [query, setQuery] = useState('');
   const [expandedWeek, setExpandedWeek] = useState<number | null>(0);
   const viewport = useRef<HTMLDivElement>(null);
@@ -41,34 +48,34 @@ export default function DevicePreview({ tab, onTabChange, onShowDetails, onSuppo
   const filteredEntries = bookPreviewEntries.filter((entry) => normalizeSearch(`${entry.group} ${entry.title}`).includes(normalizeSearch(query)));
 
   useEffect(() => {
-    setPanel(null);
+    setPanelState(null);
     viewport.current?.scrollTo({ top: 0 });
   }, [tab]);
 
   const chooseView = (view: ProductTab) => {
     viewport.current?.focus({ preventScroll: true });
-    setPanel(null);
+    setPanelState(null);
     onTabChange(view);
     viewport.current?.scrollTo({ top: 0 });
   };
 
   const openQuiz = () => {
     viewport.current?.focus({ preventScroll: true });
-    setQuizStep(0);
-    setPanel('quiz');
+    setQuizStepState(0);
+    setPanelState('quiz');
     viewport.current?.scrollTo({ top: 0 });
   };
 
   const changeQuizStep = (step: number) => {
     viewport.current?.focus({ preventScroll: true });
-    setQuizStep(step);
+    setQuizStepState(step);
     viewport.current?.scrollTo({ top: 0 });
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && panel) {
+    if (event.key === 'Escape' && panelState) {
       event.stopPropagation();
-      setPanel(null);
+      setPanelState(null);
       menuButton.current?.focus();
     }
   };
@@ -85,7 +92,7 @@ export default function DevicePreview({ tab, onTabChange, onShowDetails, onSuppo
             <span><ResetMark />MÉTODO RESET</span>
             <div>
               <button className="ap-sos" onClick={onSupport} aria-label="SOS: contatos de apoio e emergência">SOS</button>
-              <button ref={menuButton} className="ap-menu-toggle" onClick={() => { setPanel(panel === 'menu' ? null : 'menu'); viewport.current?.scrollTo({ top: 0 }); }} aria-label={panel === 'menu' ? 'Fechar menu da prévia' : 'Abrir menu da prévia'} aria-expanded={panel === 'menu'} aria-controls={panel === 'menu' ? 'app-preview-menu' : undefined}>{panel === 'menu' ? <X size={18} /> : <Menu size={18} />}</button>
+              <button ref={menuButton} className="ap-menu-toggle" onClick={() => { setPanelState(panelState === 'menu' ? null : 'menu'); viewport.current?.scrollTo({ top: 0 }); }} aria-label={panelState === 'menu' ? 'Fechar menu da prévia' : 'Abrir menu da prévia'} aria-expanded={panelState === 'menu'} aria-controls={panelState === 'menu' ? 'app-preview-menu' : undefined}>{panelState === 'menu' ? <X size={18} /> : <Menu size={18} />}</button>
             </div>
           </div>
           <div ref={viewport} className="ap-viewport" role="region" aria-label="Prévia navegável da interface, com dados de exemplo" aria-describedby="app-preview-notice" tabIndex={0}>
@@ -152,7 +159,7 @@ export default function DevicePreview({ tab, onTabChange, onShowDetails, onSuppo
                     <h4><Bell size={14} />Lembrete diário</h4>
                     <p>Receba um aviso no horário que escolher para voltar ao método.</p>
                     <div className="ap-reminder-example" role="group" aria-label="Exemplo de configuração: lembrete às 20 horas"><span className="ap-switch" aria-hidden="true" />Ativar lembrete diário<span>20:00</span></div>
-                    <button className="ap-secondary" onClick={() => onShowDetails('home')}>Como o lembrete funciona <ChevronRight size={11} /></button>
+                    <button className="ap-quiet" onClick={() => onShowDetails('home')}>Como o lembrete funciona <ChevronRight size={10} /></button>
                   </div>
                 </>}
 
