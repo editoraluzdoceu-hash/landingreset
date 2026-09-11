@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Clock3, Play, ShieldCheck, Sparkles, X } from 'lucide-react';
-import DemoPlayer from './DemoPlayer';
 import { official, pricing } from '../data/content';
+
+const DemoPlayer = lazy(() => import('./DemoPlayer'));
 
 interface HeroVideoProps {
   /** Closes the player and opens the interactive preview section. */
@@ -44,13 +45,19 @@ export default function HeroVideo({ onExplore, onWatchFull }: HeroVideoProps) {
             onClick={() => setOpen(true)}
             aria-label="Assistir a demonstração guiada do Método RESET — abre em janela"
           >
-            <img
-              src="/images/hero-video-poster.jpg"
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              decoding="async"
-            />
+            <picture>
+              <source srcSet="/images/hero-video-poster.webp" type="image/webp" />
+              <img
+                src="/images/hero-video-poster.jpg"
+                alt=""
+                aria-hidden="true"
+                width={1408}
+                height={768}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+            </picture>
             <div className="hero-video-overlay" aria-hidden="true" />
             {/* live app UI overlay */}
             <div className="hero-video-ui" aria-hidden="true">
@@ -124,7 +131,9 @@ export default function HeroVideo({ onExplore, onWatchFull }: HeroVideoProps) {
               <button ref={closeButton} className="icon-button" aria-label="Fechar demonstração" onClick={() => setOpen(false)}><X size={18} /></button>
             </div>
 
-            <DemoPlayer autoplay onExplore={explore} />
+            <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#a19684', fontSize: 12 }}>Carregando demonstração…</div>}>
+              <DemoPlayer autoplay onExplore={explore} />
+            </Suspense>
 
             <div className="hero-video-dialog-footer">
               <span>De {pricing.anchor} por {pricing.price} • {pricing.installments.label} • {pricing.parcelNote}</span>

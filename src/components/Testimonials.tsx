@@ -49,15 +49,18 @@ export default function Testimonials() {
                     <span><strong>{item.impact.value}</strong> {item.impact.label}</span>
                   </p>
                   <div className="testimonial-person">
-                    <img
-                      src={item.avatar}
-                      alt={`Foto de ${item.name}`}
-                      width={44}
-                      height={44}
-                      loading="lazy"
-                      decoding="async"
-                      className="testimonial-avatar"
-                    />
+                    <picture>
+                      <source srcSet={item.avatar.replace('.jpg', '.webp')} type="image/webp" />
+                      <img
+                        src={item.avatar}
+                        alt={`Foto de ${item.name}`}
+                        width={44}
+                        height={44}
+                        loading="lazy"
+                        decoding="async"
+                        className="testimonial-avatar"
+                      />
+                    </picture>
                     <div className="testimonial-person-info">
                       <strong>{item.name} <BadgeCheck size={13} className="verified-icon" aria-label="Compra verificada" /></strong>
                       <small>{item.location}</small>
@@ -72,8 +75,8 @@ export default function Testimonials() {
           })}
         </div>
         <div className="testimonial-trustbar">
-          <span><BadgeCheck size={14} /> Depoimentos de compradores verificados pela Cakto</span>
-          <span>★ 4,9/5 média (312 avaliações)</span>
+          <span><BadgeCheck size={14} /> 3 de 312 relatos verificados — compra via Cakto</span>
+          <span>★ 4,9/5 média em 312 avaliações</span>
           <span>Fotos autorizadas • nomes completos com consentimento</span>
         </div>
         <p className="testimonial-disclaimer">Relatos individuais fornecidos à marca com autorização de uso de imagem. Cada experiência é única e não representa uma garantia de resultados. Fotos reais de clientes — arquivadas no suporte.</p>

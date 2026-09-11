@@ -291,7 +291,7 @@ export const demoTotal = demoScript.reduce((sum, step) => sum + step.seconds, 0)
 export const testimonialStats = [
   { value: '1.200+', label: 'recomeços em andamento' },
   { value: '4,9/5', label: 'média em 312 avaliações' },
-  { value: '3 de 3', label: 'relatos com compra verificada' },
+  { value: '3 de 312', label: 'relatos verificados' },
   { value: `${official.guaranteeDays} dias`, label: 'de garantia sem justificativa' },
 ];
 
