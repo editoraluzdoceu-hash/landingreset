@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent } from 
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, type Variants } from 'motion/react';
 import { ArrowDown, ArrowRight, ArrowUp, ArrowUpRight, Check, Clock3, Leaf, LockKeyhole, Menu, ShieldCheck, Sparkles, Star, X } from 'lucide-react';
 import AccordionItem from './components/AccordionItem';
+import AuthorPortrait from './components/AuthorPortrait';
 import { Brand, ResetMark } from './components/Brand';
 import CheckoutLink from './components/CheckoutLink';
 import HeroVideo from './components/HeroVideo';
@@ -260,6 +261,7 @@ export default function App() {
         <section className="section author-section" id="autor" aria-labelledby="author-title">
           <span className="anchor-alias" id="historia" aria-hidden="true" />
           <div className="container author-layout">
+            <Reveal className="author-portrait" delay={.04}><AuthorPortrait /></Reveal>
             <Reveal className="author-heading"><p className="eyebrow">ANTES DE SER UM MÉTODO, FOI MEU RECOMEÇO.</p><h2 id="author-title">Eu também precisei<br /><em>encontrar um caminho.</em></h2><blockquote>&ldquo;{founder.quote}&rdquo;</blockquote><div className="author-signature"><span>Lucas</span><div><strong>{founder.name}</strong><small>Autor e criador do Método RESET</small></div></div></Reveal>
             <Reveal className="author-story" delay={.1}>{founder.summary.map((paragraph) => <p key={paragraph.slice(0, 40)}>{paragraph}</p>)}<button className="text-link" onClick={() => setDialog('author')}>Ler minha história completa <ArrowRight size={16} /></button></Reveal>
           </div>
