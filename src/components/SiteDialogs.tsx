@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'motion/react';
 import { ArrowUpRight, BookOpen, LifeBuoy, LockKeyhole } from 'lucide-react';
-import { appSupport, delivery, formattedPrice, founder, official, type ProductTab } from '../data/content';
+import { appSupport, delivery, formattedPrice, founder, official, pricing, type ProductTab } from '../data/content';
 import Dialog from './Dialog';
 import ProductDetails from './ProductDetails';
 import CheckoutLink from './CheckoutLink';
@@ -47,19 +47,26 @@ export default function SiteDialogs({ active, detailTab, onClose, onShowDetails 
           <h4>Recursos desta página</h4><p>Não utilizamos analytics nem publicidade nesta versão. As fontes são carregadas pelo Google Fonts, que recebe os dados técnicos de conexão necessários para entregar os arquivos. As imagens de ambientação são representações visuais; as telas interativas são adaptações da interface do produto.</p>
         </div>}
         {active === 'terms' && <div className="legal-content">
-          <ResetMark /><p className="eyebrow">AS CONDIÇÕES DO RESET</p><h3>Um pagamento.<br /><em>O método com você.</em></h3>
-          <h4>Pagamento único de {formattedPrice}</h4><p>O Kit RESET inclui aplicativo, quiz, ferramentas práticas, diário pessoal, plano flexível de 30 dias e livro completo em 15 capítulos e 4 partes. O PDF traz o mesmo conteúdo da leitura no app.</p>
+          <ResetMark /><p className="eyebrow">AS CONDIÇÕES DO RESET • OFERTA DE LANÇAMENTO</p><h3>De {pricing.anchor} por {formattedPrice}<br /><em>— {pricing.discountPercent}% OFF hoje.</em></h3>
+          <p>O Kit RESET inclui tudo abaixo. Valor ancorado somado: {pricing.anchor}.</p>
+          <ul className="details-list">
+            {pricing.breakdown.map((item) => (
+              <li key={item.name}><strong>{item.name}</strong> — {item.detail} <span style={{ marginLeft: 'auto', opacity: .7 }}><s>{item.formatted}</s></span></li>
+            ))}
+          </ul>
+          <p><strong>{pricing.finalCall}</strong> — à vista no PIX ({formattedPrice}) ou {pricing.installments.label} no cartão (total {pricing.installments.totalParcelado}). {pricing.parcelNote}</p>
           <h4>Entrega e acesso vitalício</h4><p>{delivery.instructions}</p><p>{delivery.appUsage}</p>
+          <h4>Parcelamento cobrado pela Cakto</h4><p>A Cakto processa o pagamento. O parcelamento tem acréscimo da operadora. Valor à vista no PIX: {formattedPrice}. Valor parcelado: {pricing.installments.label} (total {pricing.installments.totalParcelado}). Sem mensalidade, sem assinatura.</p>
           <h4>Garantia de {official.guaranteeDays} dias</h4><p>Conheça o app, use as ferramentas e comece o plano. Se perceber que não é para você, solicite reembolso em até 7 dias, sem precisar justificar, conforme as condições da oferta.</p>
-          <h4>Um produto educacional</h4><p>{official.disclaimer} O plano respeita a sua prontidão e não promete uma reconstrução completa em 30 dias. Lembretes dependem das permissões do navegador e de o app permanecer aberto ou minimizado.</p>
-          <div className="details-purchase"><CheckoutLink>Ir para o checkout</CheckoutLink></div>
+          <h4>Um produto educacional</h4><p>{official.disclaimer} O plano respeita a sua prontidão e não promete uma reconstrução completa em 30 dias. 15 minutos por dia é a média sugerida para organizar sua vida; avance no seu ritmo. Lembretes dependem das permissões do navegador e de o app permanecer aberto ou minimizado.</p>
+          <div className="details-purchase"><CheckoutLink>Ir para o checkout — {formattedPrice}</CheckoutLink><p>De {pricing.anchor} por {formattedPrice} • Economize {pricing.economy} • {pricing.installments.label}</p></div>
         </div>}
         {active === 'access' && <div className="legal-content">
           <ResetMark /><p className="eyebrow">COMPRA E ENTREGA PELA CAKTO</p><h3>Um próximo passo.<br /><em>Sem complicar.</em></h3>
-          <p>O Kit RESET custa {formattedPrice}, em pagamento único, com acesso vitalício e garantia de {official.guaranteeDays} dias.</p>
+          <p>O Kit RESET custa <s style={{ opacity: .6 }}>{pricing.anchor}</s> <strong>{formattedPrice}</strong> à vista no PIX — tudo isso por {formattedPrice}: Aplicativo ({pricing.breakdown[0].formatted}), Kit Ferramentas ({pricing.breakdown[1].formatted}) e Livro ({pricing.breakdown[2].formatted}). No cartão: {pricing.installments.label} (total {pricing.installments.totalParcelado}). {pricing.parcelNote} Acesso vitalício e garantia de {official.guaranteeDays} dias. Economize {pricing.economy}.</p>
           <h4>Onde recebo o aplicativo?</h4><p>{delivery.instructions}</p>
           <h4>Sem login ou senha no app</h4><p>{delivery.appUsage}</p>
-          <a className="help-option" href={official.checkoutUrl} target="_blank" rel="noopener noreferrer"><LockKeyhole size={20} /><span><strong>Comprar pelo checkout da Cakto</strong><small>Abre em uma nova aba.</small></span><ArrowUpRight size={17} /></a>
+          <a className="help-option" href={official.checkoutUrl} target="_blank" rel="noopener noreferrer"><LockKeyhole size={20} /><span><strong>Comprar por {formattedPrice} — de {pricing.anchor} por {formattedPrice}</strong><small>Abre em uma nova aba. Ou {pricing.installments.label} no cartão.</small></span><ArrowUpRight size={17} /></a>
           <button className="help-option" onClick={() => onShowDetails('tools')}><BookOpen size={20} /><span><strong>Conferir o que está incluído</strong><small>Conheça as ferramentas antes de comprar.</small></span><ArrowUpRight size={17} /></button>
           <h4>Já comprou?</h4><p>{delivery.returningBuyer}</p>
           <p className="legal-note">{official.disclaimer}</p>

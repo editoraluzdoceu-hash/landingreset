@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { official } from '../data/content';
 
 interface CheckoutLinkProps {
-  children?: string;
+  children?: React.ReactNode;
   className?: string;
 }
 
