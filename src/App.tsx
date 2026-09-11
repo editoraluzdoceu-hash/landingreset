@@ -131,7 +131,7 @@ export default function App() {
               <motion.div className="hero-badge" variants={heroItem}>
                 <span className="hero-badge-dot" aria-hidden="true" />
                 <span>{heroContent.badge}</span>
-                <span className="hero-badge-rating" aria-label="Avaliação 4,9 de 5"><Star size={11} fill="#e9c384" stroke="#e9c384" /> 4,9/5 <small>(312 avaliações)</small></span>
+                <span className="hero-badge-rating" aria-label="Avaliação 4,9 de 5, 3 de 312 relatos verificados"><Star size={11} fill="#e9c384" stroke="#e9c384" /> 4,9/5 <small>• 3 de 312 relatos verificados</small></span>
               </motion.div>
               <motion.h1 id="hero-title" variants={heroItem}>Método RESET<span>.</span></motion.h1>
               <motion.p className="hero-promise" variants={heroItem}>

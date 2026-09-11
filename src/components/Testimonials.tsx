@@ -75,8 +75,8 @@ export default function Testimonials() {
           })}
         </div>
         <div className="testimonial-trustbar">
-          <span><BadgeCheck size={14} /> Depoimentos de compradores verificados pela Cakto</span>
-          <span>★ 4,9/5 média (312 avaliações)</span>
+          <span><BadgeCheck size={14} /> 3 de 312 relatos verificados — compra via Cakto</span>
+          <span>★ 4,9/5 média em 312 avaliações</span>
           <span>Fotos autorizadas • nomes completos com consentimento</span>
         </div>
         <p className="testimonial-disclaimer">Relatos individuais fornecidos à marca com autorização de uso de imagem. Cada experiência é única e não representa uma garantia de resultados. Fotos reais de clientes — arquivadas no suporte.</p>
